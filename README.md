@@ -74,4 +74,6 @@ If you find a bug or a feature request, please open an issue. We are happy to he
 
 ### Authors
 
-Fido was created by [Ben Spector](https://github.com/Sydriax) and [Michael Truell](https://github.com/truell20).
+Halite was created by [Ben Spector](https://github.com/Sydriax) and [Michael Truell](https://github.com/truell20).
+
+Thank you to [Josh Gruenstein](https://github.com/joshuagruenstein) for your front-end related contributions.
