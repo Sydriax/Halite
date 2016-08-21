@@ -26,12 +26,7 @@ echo "Docker Setup complete"
 ################
 service docker.io restart
 
-echo "Creating Docker Image"
-docker build -t 'HaliteSandbox' - < Dockerfile
+echo "Pulling docker image"
+docker pull mntruell/halite_sandbox:latest
 echo "Retrieving Installed Docker Images"
 docker images
-
-################
-# Start Worker #
-################
-python3 worker.py
