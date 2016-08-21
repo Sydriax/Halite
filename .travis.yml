@@ -24,10 +24,10 @@ install:
   - cp travisTests.ini ../halite.ini
  
   - cd ~/build/HaliteChallenge/Halite/website
-  - ./install.sh
+  - sudo ./install.sh
 
   - cd ~/build/HaliteChallenge/Halite/worker
-  - ./install.sh
+  - sudo ./install.sh
 
   - cd ~/build/HaliteChallenge/Halite/tests
   - sudo ./install.sh
