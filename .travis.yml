@@ -22,7 +22,8 @@ install:
   - cd ~/build/HaliteChallenge/Halite/website
   - ./install.sh
 
-  - phpenv global 5.6
+  - cd ~/build/HaliteChallenge/Halite/worker
+  - ./install.sh
 
   - cd ~/build/HaliteChallenge/Halite/tests
   - sudo ./install.sh
