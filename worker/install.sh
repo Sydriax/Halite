@@ -27,7 +27,7 @@ echo "Docker Setup complete"
 service docker.io restart
 
 echo "Creating Docker Image"
-docker build -t 'virtual_machine' - < Dockerfile
+docker build -t 'HaliteSandbox' - < Dockerfile
 echo "Retrieving Installed Docker Images"
 docker images
 
