@@ -2,7 +2,7 @@
 # Compiler tools #
 ##################
 apt-get -y update 
-apt-get install -y build-essential python3 default-jdk clang++-3.5
+apt-get install -y curl build-essential python3 default-jdk clang++-3.5
 curl -sSf https://static.rust-lang.org/rustup.sh | sh
 
 ##########
@@ -15,11 +15,7 @@ pip3 install zip
 ################
 # Docker SETUP #
 ################
-apt-get install -y docker.io
-ln -sf /usr/bin/docker.io /usr/local/bin/docker
-sed -i '$acomplete -F _docker docker' /etc/bash_completion.d/docker.io
-
-echo "Docker Setup complete"
+curl -sSL https://get.docker.com/ | sh
 
 ################
 # Start Docker #
