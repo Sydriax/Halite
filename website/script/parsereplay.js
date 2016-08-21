@@ -1,7 +1,7 @@
 byteArrayToGame = function(bytes) {
     var headerSplit = bytes.indexOf(10);
     var header = String.fromCharCode.apply(null, bytes.slice(0, headerSplit))
-    if (header != "HLT 9") {
+    if (header != "HLT 10") {
         alert("Invalid header: " + header)
     }
 
@@ -39,10 +39,7 @@ byteArrayToGame = function(bytes) {
     for(i = 0; i < game.numPlayers; i++) {
         var nextPlayerSplit = bytes.indexOf(10, playerSplit + 1);
         var playerLine = String.fromCharCode.apply(null, bytes.slice(playerSplit + 1, nextPlayerSplit));
-        var playerDetails = playerLine.split("\0");
-        var playerColorString = playerDetails[1].split(' ');
-        function compToHex(c) { var hex = c.toString(16); return hex.length == 1 ? "0" + hex : hex; };
-        game.players.push({name: playerDetails[0], color: colors[i] });
+        game.players.push({name: playerLine, color: colors[i] });
         console.log(game.players[game.players.length - 1].color);
         playerSplit = nextPlayerSplit;
     }
@@ -59,7 +56,7 @@ byteArrayToGame = function(bytes) {
 
     game.frames = []
     game.moves = []
-    var currIndex = playerSplit + 1 + cellCount + 1;
+    var currIndex = playerSplit + 1 + cellCount;
     for(var frameCount = 0; frameCount < game.numFrames; frameCount++) {
         var cellsRead = 0;
         var frame = [];

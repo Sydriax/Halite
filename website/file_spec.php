@@ -15,13 +15,13 @@
 			<div class="col-sm-12">
 				<h1>File Specification</h1>
 				<p>A sample file should look like:<br>
-						<pre><code>HLT 9 <-- A header to distinguish version and ensure that the file will be valid. This is followed by a newline.
+						<pre><code>HLT 10 <-- A header to distinguish version and ensure that the file will be valid. This is followed by a newline.
 WIDTH HEIGHT NUM_PLAYERS NUM_FRAMES <-- The number of frames is always one more than the number of turns. Note that NUM_FRAMES is always 1 more than NUM_TURNS. This is followed by a newline.
-Name1'\0'r1 g1 b1 <-- The player name and the color to map the player to, separated by a null character. Each of these lines is followed by a newline.
-Name2'\0'r2 g2 b2
+Name1 <-- The player name, followed by a newline. Each maps to the next owner tag (this to 1, the next to 2, etc).
+Name2
 ...
-NameU'\0'rU gU bU
-[WIDTH * HEIGHT bytes] <-- Represents the production of the map. Fills in the map by row, and within a row by column, where each byte is the production of that square. This is followed by a newline.
+NameU
+[WIDTH * HEIGHT bytes] <-- Represents the production of the map. Fills in the map by row, and within a row by column, where each byte is the production of that square. This is <b>NOT</b> followed by a newline.
 FRAME(1)MOVES(1)FRAME(2)MOVES(2)FRAME(3)...MOVES(NUM_TURNS)FRAME(NUM_FRAMES)</code></pre>
 				</p>
 				<p>
