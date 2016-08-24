@@ -44,15 +44,19 @@ class GameTests(unittest.TestCase):
 		WIN_BOT_PATH = "winBot"
 		LOSE_BOT_PATH = "loseBot"
 
+		if os.path.isdir(os.path.join(WORKER_PATH, WIN_BOT_PATH)):
+			shutil.rmtree(os.path.join(WORKER_PATH, WIN_BOT_PATH))
+		if os.path.isdir(os.path.join(WORKER_PATH, LOSE_BOT_PATH)):
+			shutil.rmtree(os.path.join(WORKER_PATH, LOSE_BOT_PATH))
+
 		shutil.copytree(os.path.join(OUR_PATH, WIN_BOT_PATH), os.path.join(WORKER_PATH, WIN_BOT_PATH))
 		shutil.copytree(os.path.join(OUR_PATH, LOSE_BOT_PATH), os.path.join(WORKER_PATH, LOSE_BOT_PATH))
 		os.chdir(WORKER_PATH)
 		output = worker.runGame(20, 20, [{"userID": WIN_BOT_PATH, "username": WIN_BOT_PATH, "numSubmissions": "1"}, {"userID": LOSE_BOT_PATH, "username": LOSE_BOT_PATH, "numSubmissions": "1"}])
 		os.chdir(OUR_PATH)
 
-		assert len(output) == 5
-		assert int(output[1].split(" ")[0]) == 1
-		assert int(output[2].split(" ")[0]) == 2
+		assert int(output[len(output)-4].split(" ")[0]) == 1
+		assert int(output[len(output)-3].split(" ")[0]) == 2
 
 	def testParsing(self):
 		'''Test the parsing of the output of runGame.sh'''
