@@ -12,6 +12,7 @@ sys.path.append(WORKER_PATH)
 os.chdir(WORKER_PATH)
 print(os.listdir(os.getcwd()))
 import compiler
+import archive
 import worker
 os.chdir(OUR_PATH)
 
