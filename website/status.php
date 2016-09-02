@@ -38,7 +38,7 @@
 						<table class="table well well-sm" id="workerTable">
 							<thead>
 								<tr>
-									<th>Name</th>
+									<th>ID</th>
 									<th>Last Communication</th>
 								</tr>
 							</thead>
