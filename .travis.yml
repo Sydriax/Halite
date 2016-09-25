@@ -28,6 +28,7 @@ install:
 
   - cd ~/build/HaliteChallenge/Halite/tests
   - sudo ./install.sh
+  - g++ -v
 
 script:
   - cd ~/build/HaliteChallenge/Halite/tests/
