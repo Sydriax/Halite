@@ -2,7 +2,9 @@ sudo: required
 
 dist: trusty
 
-language: generic
+language: cpp
+
+compiler: gcc
 
 services: 
   - mysql
