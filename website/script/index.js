@@ -1,6 +1,4 @@
 $(function() {
-    leaderTable.init(getActiveUsers());
-
     if(getGET("userID") != null && getGET("verificationCode") != null) {
         var res = verifyUser(parseInt(getGET("userID")), getGET("verificationCode"));
         if(res == "Success") {
