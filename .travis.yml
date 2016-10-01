@@ -19,6 +19,7 @@ install:
   - sudo apt-get -qq update
   - sudo apt-get -qq install g++-4.9
   - export CXX="g++-4.9" 
+  - echo $CXX; 
   - g++ -v
 
   - cd ~/build/HaliteChallenge/Halite/tests
@@ -34,10 +35,9 @@ install:
 
   - cd ~/build/HaliteChallenge/Halite/tests
   - sudo ./install.sh
-  - g++ -v
-  - echo $CXX; 
 
 script:
+  - export CXX="g++-4.9" 
   - cd ~/build/HaliteChallenge/Halite/tests/
   - sudo ./runTests.sh
 
