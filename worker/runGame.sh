@@ -8,7 +8,7 @@ if [ ! -f $ENVIRONMENT ]; then
 	echo "NO ENVIRONMENT!!"
 	cd ../environment
 	make clean
-	make CXX=g++-4.9
+	make 
 	mv environment ../worker
 	cd ../worker
 fi
