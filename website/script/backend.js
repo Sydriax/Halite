@@ -191,15 +191,17 @@ function getRandomGameName() {
     return response.responseJSON;
 }
 
-function getHistories(userID) {
+function getHistories(userID, callback) {
     var response = $.ajax({
         url: url+"history",
-        async: false,
+        async: true,
         method: "GET",
-        data: {userID: userID}
+        data: {userID: userID},
+        success: function(response) {
+            console.log(response)
+            callback(response);
+        }
     });
-    console.log(response)
-    return response.responseJSON;
 }
 
 function getThroughput() {
@@ -229,7 +231,7 @@ function getFilteredUsers(filters, orderBy, limit, page) {
         method: "GET",
         data: {fields: fields, values: values, orderBy: orderBy, limit: limit, page: page}
     });
-	console.log(result)
+    console.log(result)
 
     return result.responseJSON;
 }
