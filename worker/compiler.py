@@ -60,12 +60,14 @@ def nukeglob(pattern):
 
 def _run_cmd(cmd, working_dir, timelimit):
     absoluteWorkingDir = os.path.abspath(working_dir)
-    cmd = "docker run -i -v "+absoluteWorkingDir+":"+absoluteWorkingDir+" mntruell/halite_sandbox:latest sh -c \"useradd -r gamerunner; chown gamerunner -R "+absoluteWorkingDir+"; chown gamerunner -R "+os.path.join(absoluteWorkingDir, "*")+"; su -m gamerunner -c 'cd "+absoluteWorkingDir+"; "+cmd+"'\""
-    print(cmd)
+    cmd = "docker run -i -v "+absoluteWorkingDir+":"+absoluteWorkingDir+" mntruell/halite_sandbox:latest sh -c \"cd "+absoluteWorkingDir+"; "+cmd+"\""
+
+    os.system("sysctl -w net.ipv4.ip_forward=1") # Turn on ip forwarding
     process = subprocess.Popen(cmd, cwd=working_dir, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
     start = time.time()
     timelimit = timelimit - start
     rawOut, rawErrors = process.communicate(timeout=timelimit)
+    os.system("sysctl -w net.ipv4.ip_forward=0") # Turn off ip forwarding
 
     outString = rawOut.decode("utf-8").strip()
     out = outString.split("\n") if outString.isspace() == False and outString != "" else None
@@ -175,7 +177,6 @@ class ExternalCompiler(Compiler):
 
     def cmd_error_filter(self, cmd_out, cmd_errors):
         """Default implementation doesn't filter"""
-        cmd_errors = [line for line in cmd_errors if line is None or not self.stderr_re.search(line)]
         return cmd_errors
 
 
@@ -212,8 +213,6 @@ class ErrorFilterCompiler(ExternalCompiler):
         return "ErrorFilterCompiler: %s" % (' '.join(self.args),)
 
     def cmd_error_filter(self, cmd_out, cmd_errors):
-        cmd_errors = ExternalCompiler.cmd_error_filter(cmd_out, cmd_errors)
-
         """Skip and filter lines"""
         if self.skip_stdout > 0:
             del cmd_out[:self.skip_stdout]
@@ -550,8 +549,7 @@ def compile_anything(bot_dir, installTimeLimit=600, timelimit=600, max_error_len
         # If we get this far, then we have successfully auto-detected
         # the language that this entry is using.
         print("compiling")
-        compiled, errors = compile_function(detected_language, bot_dir,
-                timelimit)
+        compiled, errors = compile_function(detected_language, bot_dir, timelimit)
         print("done compiling")
         if compiled:
             name = detected_language.name
