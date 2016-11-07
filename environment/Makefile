@@ -1,5 +1,5 @@
 CXXFLAGS += -std=c++11 -pthread -I ./
-INSTALL_PATH?=/usr/local
+INSTALL_PATH?=./
 SOURCES=$(shell find . -name "*.cpp")
 OBJECTS=$(SOURCES:%.cpp=%.o)
 TARGET=halite
