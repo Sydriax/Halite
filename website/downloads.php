@@ -34,7 +34,7 @@
 
                 <h3>Linux/macOS</h3>
                 <p>Execute:</p>
-                <pre><code>sudo sh -c "$(curl -fsSL https://raw.githubusercontent.com/HaliteChallenge/Halite/master/environment/install.sh)"</code></pre>
+                <pre><code>sh -c "$(curl -fsSL https://raw.githubusercontent.com/HaliteChallenge/Halite/master/environment/install.sh)"</code></pre>
                 <p>Now, the <code>halite</code> command will run the environment.</p>
 
                 <h3>Windows</h3>
