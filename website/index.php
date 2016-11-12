@@ -27,11 +27,6 @@ if(isset($_SESSION['userID'])) {
 
     <link href="lib/bootstrap.min.css" rel="stylesheet">
     <link href="style/general.css" rel="stylesheet">
-    <style>
-        #intro_blurb p {
-            font-size: 1.5em;
-        }
-    </style>
 </head>
 
 <body>
@@ -45,7 +40,6 @@ if(isset($_SESSION['userID'])) {
                         <h1>Halite is an artificial intelligence programming challenge.</h1>
                         <p>Players control a bot using the programming language of their choice. Bots fight for control of a 2D grid and the bot with the most territory at the end wins. Victory will require micromanaging of the movement of your pieces, optimizing your bot's combat ability, and braving a branching factor billions of times higher than that of Go.</p>
                         <p>The simplest Halite bot is just 10 lines of code, and it takes less than a minute to get on the leaderboard. <a href="basics_quickstart.php">Interested?</a></p>
-                        <p>This site is in beta. If you see any problems, please post on the <a href="http://forums.halite.io">forums</a>.</p>
                     </div>
 
                     <h1>Creators</h1>
@@ -61,6 +55,14 @@ if(isset($_SESSION['userID'])) {
                             <div class="text-center" style="margin-top: 10px; margin-bottom: 20.5px;"><a href="https://tech.cornell.edu"><img src="assets/cornell_tech.png" style="max-width: 100%; max-height: 70px"></a></div>
                             <p>Cornell Tech brings together faculty, business leaders, tech entrepreneurs, and students in a catalytic environment to produce visionary results grounded in significant needs that will reinvent the way we live in the digital age.</p>
                         </div>
+                    </div>
+
+                    <h1>Sponsors</h1>
+                    <p>Halite is grateful for the support of many strong tech partners!</p>
+                    
+                    <div class="text-center" style="margin-top: 10px; margin-bottom: 20.5px;">
+                        <a href="https://www.vettery.com/"><img src="assets/vettery.png" style="max-width: 100%; max-height: 70px; margin-right: 40px;"></a>
+                        <a href="https://www.aminoapps.com/"><img src="assets/amino.png" style="max-width: 100%; max-height: 70px;"></a>
                     </div>
                 </div>
             </div>

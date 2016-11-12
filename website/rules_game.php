@@ -33,7 +33,11 @@
 
                 <p>Because a piece damages all adjacent enemy pieces, if a piece is killed while attacking multiple pieces, it will output (often significantly) more damage than it had strength. This is referred to as "overkill" and means that bots can use their pieces tactically to their own advantage.</p>
 
-                <p>The map is initialized by the environment to have productions and strengths. Combat with map squares works identically to combat with other players except only applies on that square; empty map squares neither apply damage to nor take damage from adjacent squares. Players should note that the map does wrap around; if a piece at the top of the map moves North, it will reappear on the bottom of the map, and pieces on the top and bottom of the map will engage in combat (provided that they are in the same column).</p>
+                <p>The map is initialized by the environment to have productions and strengths. Combat with map squares works identically to combat with other players except only applies on that square; empty map squares neither apply damage to nor take damage from adjacent squares.</p>
+
+                <p>Players should note that the map does wrap around; if a piece at the top of the map moves North, it will reappear on the bottom of the map, and pieces on the top and bottom of the map will engage in combat (provided that they are in the same column).</p>
+
+                <p>The origin of the map (the point at coordinates (0, 0)) is the north west (top left) corner of the map.</p>
 
                 <p>Players are scored according to the reverse of the order in which they are destroyed. The player last standing wins, whereas the player which was destroyed first comes in last. Bots are scored relatively; in a game with many players it is far better to come in second than to come in last.</p>
 
@@ -59,7 +63,7 @@
 
                 <h3>Turns</h3>
 
-                <p>After all bots have finished setting up, the environment will do the following until endgame conditions are met.
+                <p>After all bots have finished setting up, the environment will do the following until endgame conditions are met.</p>
                     <ol>
                         <li>Send the present gamestate - map and messages - to all players.</li>
                         <li>Receive moves from the players.</li>
@@ -69,12 +73,11 @@
                         <li>Simultaneously damage (and remove if damage equals or exceeds strength) all player's pieces. All pieces will output damage equivalent to their strength when starting this phase, and the damage will apply to all coinciding or adjacent enemy squares.</li>
                         <li>Check if endgame conditions have been met.</li>
                     </ol>
-                    One should note that because all pieces damage all adjacent enemy pieces, if a piece is killed while attacking multiple pieces, it will output (often significantly) more damage than it had strength. This is referred to as "overkill" and means that bots can use their pieces tactically to their own advantage.
-                </p>
+                <p>One should note that because all pieces damage all adjacent enemy pieces, if a piece is killed while attacking multiple pieces, it will output (often significantly) more damage than it had strength. This is referred to as "overkill" and means that bots can use their pieces tactically to their own advantage.</p>
 
                 <h3>Timeouts</h3>
 
-                <p>Bots are given a total amount of time that they will work from during a game, and are permitted to use it as they choose. Bots are given 15 seconds to initialize and 1 second for every subsequent turn. Every bot's clock starts ticking once the environment sends its message (be it initialization or frame) to the bot and resets once the environment receives the newline character marking the end of the bot's response. If a bot's clock hits zero, it is ejected from the game and deemed to have lost.</p>
+                <p>Bots are given 15 seconds to initialize and 1 second for every subsequent turn. Every bot's clock starts ticking once the environment sends its message (be it initialization or frame) to the bot and resets once the environment receives the newline character marking the end of the bot's response. If a bot's clock hits zero, it is ejected from the game and deemed to have lost. It's pieces become part of the map.</p>
 
                 <h3>Maps</h3>
 

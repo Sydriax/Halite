@@ -21,6 +21,10 @@
                 <h3>Prerequisites</h3>
                 <p>Make sure that you have read <a href="https://halite.io/basics_intro_halite.php">Introducing Halite</a> and followed the setup procedures described there.</p>
                 <p>Now open up the MyBot file in your favorite editor and let's get started!</p>
+
+                <h3>Import Considerations</h3>
+                <p>When writing a halite bot, be sure to stay away from functions like <code>System.out.print</code>, <code>cout</code>, <code>print</code>, etc. Bots use stdout and stdin to communicate with the game environment. You will be ejected from a game of Halite if you print debugging info to stdout. Instead, print to a log file.</p>
+
                 <h3>A Look At the Random Bot</h3>
                 <p>Now that you know how the game works, how do the two random starter bots work? How does one code a Halite bot? Here is the source from the main file of our python starter bot:</p>
                 <span data-gist-id="73cd76d10de7e5147d7e0b49eb65f288" data-gist-file="Random.py"></span> 
@@ -46,11 +50,16 @@
                 
                 <span data-gist-id="73cd76d10de7e5147d7e0b49eb65f288" data-gist-hide-footer="true" data-gist-line="16" data-gist-file="Random.py"></span> 
 
-                <p>And that's that's random bot!</p>
+                <p>And that's random bot!</p>
 
                 <h3>Utilizing Our Production</h3>
 
-                <p>From the rules outlined in <a href="https://halite.io/basics_intro_halite.php">Introducing Halite</a>, we know that when a piece moves, it gains no strength and leaves behind a piece with zero strength. It easily follows from this that moving zero strength pieces is a terrible idea since your piece will necessarily stay at zero strength, and  ;zero-strength pieces cannot conquer territory. Let's make sure that we tell all of our zero strength pieces to remain still.</p>
+                <p>From the rules outlined in <a href="https://halite.io/basics_intro_halite.php">Introducing Halite</a>, we know that when a piece moves, it gains no strength and leaves behind a piece with zero strength. It easily follows from this that moving zero strength pieces is a terrible idea, since:</p>
+                <ul>
+                    <li>A zero strength piece that moves will necessarily stay at zero strength, because pieces don't gain strength for any turn that they move.</li>
+                    <li>A zero strength piece won't ever conqueror any territory, because it has no strength with which to damage other pieces.</li>
+                </ul>
+                <p>Let's improve our bot by making sure that we tell all of our zero strength pieces to remain still.</p>
                 <span data-gist-id="73cd76d10de7e5147d7e0b49eb65f288" data-gist-file="Revision1.py"></span> 
 
                 

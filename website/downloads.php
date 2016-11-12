@@ -16,13 +16,14 @@
 
                 <h2>Starter Packages</h2>
                 <p>
-                    This set of starter packages was uploaded on November 2nd. 
+                    This set of starter packages was uploaded on November 6th. We fixed a minor bug with the getDistance() method in the Python starter package.
                 </p>
                 <p>
                     <ul>
                         <li><a href="downloads/starterpackages/Halite-Python-Starter-Package.zip">Python 3</a></li>
                         <li><a href="downloads/starterpackages/Halite-Java-Starter-Package.zip">Java 7</a></li>
                         <li><a href="downloads/starterpackages/Halite-C++-Starter-Package.zip">C++ 11</a></li>
+                        <li><a href="downloads/starterpackages/Halite-C%23-Starter-Package.zip">C# 6.0</a></li>
                         <li><a href="downloads/starterpackages/Halite-Rust-Starter-Package.zip">Rust 1.10</a></li>
                         <li><a href="downloads/starterpackages/Halite-Scala-Starter-Package.zip">Scala 2.10.4</a></li>
                     </ul>
@@ -33,14 +34,15 @@
 
                 <h3>Linux/macOS</h3>
                 <p>Execute:</p>
-                <pre><code>sudo sh -c "$(curl -fsSL https://raw.githubusercontent.com/HaliteChallenge/Halite/master/environment/install.sh)"</code></pre>
-                <p>Now, the <code>halite</code> command will run the environment.</p>
+                <pre><code>sh -c "$(curl -fsSL https://raw.githubusercontent.com/HaliteChallenge/Halite/master/environment/install.sh)"</code></pre>
+                <p>You should see a file titled "halite" in your current directory. This is the game environment. Put it in the root directory of your starter package.</p>
 
                 <h3>Windows</h3>
-                <p>Download <a href="downloads/environment/halite.exe">halite.exe</a>.</p>
+                <p>Download <a href="downloads/environment/halite.exe">halite.exe</a>. Put it in the root directory of your starter package.</p>
                 
                 <h3>Building from Source</h3>
-                <p>Extract <a href="downloads/environment/HaliteEnvironment-Source.zip">this archive</a>. If you are on Unix, run <code>make</code> and <code>sudo make install</code> inside the extracted folder. The <code>halite</code> command will now run the environment.</p>
+                <p>Extract <a href="downloads/environment/HaliteEnvironment-Source.zip">this archive</a>.</p>
+                <p>If you are on Unix, run <code>make</code> inside the extracted folder. The halite binary will now run the environment.</p>
                 <p>If you are on Windows, run the "make.bat" file. The file named "halite.exe" is your new environment binary.</p>
             </div>
         </div>
