@@ -328,7 +328,7 @@ GameStatistics Halite::runGame(std::vector<std::string> * names_, unsigned int s
     while(std::count(result.begin(), result.end(), true) > 1 && turn_number < maxTurnNumber) {
         //Increment turn number:
         turn_number++;
-        if(!quiet_output) std::cout << "Turn " << turn_number << "\n";
+        if(!quiet_output && !silent_output) std::cout << "Turn " << turn_number << "\n";
         //Frame logic.
         std::vector<bool> newResult = processNextFrame(result);
         //Add to vector of players that should be dead.
@@ -371,6 +371,7 @@ GameStatistics Halite::runGame(std::vector<std::string> * names_, unsigned int s
     stats.timeout_log_filenames = std::vector<std::string>(timeout_tags.size());
     //Output gamefile. First try the replays folder; if that fails, just use the straight filename.
     stats.output_filename = "Replays/" + std::to_string(id) + '-' + std::to_string(seed) + ".hlt";
+    std::cout << stats.output_filename << std::endl;
     try {
         output(stats.output_filename);
     }
@@ -378,8 +379,10 @@ GameStatistics Halite::runGame(std::vector<std::string> * names_, unsigned int s
         stats.output_filename = stats.output_filename.substr(8);
         output(stats.output_filename);
     }
-    if(!quiet_output) std::cout << "Map seed was " << seed << std::endl << "Opening a file at " << stats.output_filename << std::endl;
-    else std::cout << stats.output_filename << ' ' << seed << std::endl;
+    if(!silent_output) {
+      if(!quiet_output) std::cout << "Map seed was " << seed << std::endl << "Opening a file at " << stats.output_filename << std::endl;
+      else std::cout << stats.output_filename << ' ' << seed << std::endl;
+    }
     //Output logs for players that timed out or errored.
     int timeoutIndex = 0;
     for(auto a = timeout_tags.begin(); a != timeout_tags.end(); a++) {
