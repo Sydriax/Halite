@@ -131,7 +131,7 @@ int main(int argc, char ** argv) {
 
     std::string victoryOut;
     if(!silent_output) {
-      if(!quiet_output) {
+      if(quiet_output) {
         std::cout << stats;
       } else {
         for(unsigned int a = 0; a < stats.player_statistics.size(); a++) std::cout << "Player #" << stats.player_statistics[a].tag << ", " << my_game->getName(stats.player_statistics[a].tag) << ", came in rank #" << stats.player_statistics[a].rank << "!\n";
