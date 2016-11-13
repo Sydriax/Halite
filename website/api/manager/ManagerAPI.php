@@ -5,6 +5,7 @@ require __DIR__ . '/../../vendor/autoload.php';
 require_once '../API.class.php';
 
 define("INI_FILE", "../../../halite.ini");
+define("LOCK_SAMPLE_SIZE", 5);
 
 ini_set('upload_max_filesize', '50M');
 ini_set('post_max_size', '50M');
@@ -85,7 +86,7 @@ class ManagerAPI extends API{
             $possibleNumPlayers = array(2, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 5, 5, 6);
             $numPlayers = $possibleNumPlayers[array_rand($possibleNumPlayers)];
 
-            $seedPlayer = $this->select("SELECT * FROM User WHERE isRunning = 1 and (userID in (SELECT gu.userID FROM GameUser gu GROUP BY gu.userID HAVING AVG(gu.didTimeout) < 1) or numGames < 20) order by rand()*-pow(sigma, 2) LIMIT 1");
+            $seedPlayer = $this->select("SELECT * FROM User WHERE isRunning = 1 and (userID in (SELECT gu.userID FROM GameUser gu GROUP BY gu.userID HAVING AVG(gu.didTimeout) < 1) or numGames < ".LOCK_SAMPLE_SIZE.") order by rand()*-pow(sigma, 2) LIMIT 1");
 
             if(count($seedPlayer) < 1) {
                 $users = $this->selectMultiple("SELECT * FROM User WHERE isRunning=1 ORDER BY rand()");
@@ -99,7 +100,7 @@ class ManagerAPI extends API{
                 }
             }
             if(count($seedPlayer) < 1) return null;
-            $players = $this->selectMultiple("SELECT * FROM User WHERE isRunning=1 and ABS(rank-{$seedPlayer['rank']}) < (5 / pow(rand(), 0.65)) and userID <> {$seedPlayer['userID']} ORDER BY rand() LIMIT ".($numPlayers-1));
+            $players = $this->selectMultiple("SELECT * FROM User WHERE isRunning=1 and ABS(rank-{$seedPlayer['rank']}) < (5 / pow(rand(), 0.65)) and userID <> {$seedPlayer['userID']} and (userID in (SELECT gu.userID FROM GameUser gu GROUP BY gu.userID HAVING AVG(gu.didTimeout) < 1) or numGames < ".LOCK_SAMPLE_SIZE.") ORDER BY rand() LIMIT ".($numPlayers-1));
             array_push($players, $seedPlayer);
 
             // Pick map size
@@ -219,9 +220,12 @@ class ManagerAPI extends API{
             }
             
 
-            // Send first game email and first timeout email
+            // Send notifications 
             foreach($users as $user) {
                 $storedUser = $this->select("SELECT * FROM User WHERE userID=".$user->userID);
+                if(intval($storedUser["numGames"]) == LOCK_SAMPLE_SIZE and count($this->select("SELECT * from User where userID in (SELECT gu.userID FROM GameUser gu GROUP BY gu.userID HAVING AVG(gu.didTimeout) == 1) and userID = {$storedUser['userID']}")) > 0) {
+                    $this->sendNotification($storedUser, "Bot Locked", "<p>Your bot is timing out/erroring too much on our servers. We will stop playing games with this version of your bot.</p><p>Once you submit a new bot, games between your bot and others' will resume.</p>", -1);
+                }
                 if($user->didTimeout && mysqli_query($this->mysqli, "SELECT * from GameUser WHERE didTimeout = 1 and versionNumber = {$storedUser['numSubmissions']} and userID={$user->userID}")->num_rows == 1) {
                     $errorLogContents = NULL;
                     foreach($_FILES as $file) {
