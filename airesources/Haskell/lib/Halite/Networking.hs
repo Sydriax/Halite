@@ -3,7 +3,7 @@ module Halite.Networking
   ) where
 
 import Halite.Types
-import Data.List (zipWith5)
+import Data.List (zipWith4)
 import System.Random (getStdGen)
 import System.IO (hFlush, stdout)
 
@@ -11,9 +11,10 @@ communicate
    :: Monad m
    => String
    -> (ID -> Map -> m [Move])
-   -> a -> (m [Move] -> a -> ([Move], a))
+   -> (m [Move] -> a -> ([Move], a))
+   -> a
    -> IO ()
-communicate name algorithm input runMonad = do
+communicate name algorithm runMonad input = do
     (myID, gameMap) <- getInit
     sendInit name
     loop (algorithm myID) gameMap input runMonad
@@ -47,7 +48,7 @@ sendFrame s = sendFrame' s >> hFlush stdout
 
 
 parseMapContents :: (Int, Int) -> [Int] -> String -> [[Site]]
-parseMapContents (w, h) pds s = splitEvery w $ zipWith5 Site ons sts pds locations
+parseMapContents (w, h) pds s = splitEvery w $ zipWith4 Site ons sts pds locations
   where
     (owners, sts) = splitMapContents (read <$> words s) (w * h)
     ons = stretch owners
