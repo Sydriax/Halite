@@ -328,7 +328,7 @@ GameStatistics Halite::runGame(std::vector<std::string> * names_, unsigned int s
     while(std::count(result.begin(), result.end(), true) > 1 && turn_number < maxTurnNumber) {
         //Increment turn number:
         turn_number++;
-        if(!quiet_output) std::cout << "Turn " << turn_number << "\n";
+        if(!quiet_output) std::cout << "Turn " << turn_number << " ";
         //Frame logic.
         std::vector<bool> newResult = processNextFrame(result);
         //Add to vector of players that should be dead.
@@ -342,6 +342,13 @@ GameStatistics Halite::runGame(std::vector<std::string> * names_, unsigned int s
             return last_territory_count[u1] < last_territory_count[u2];
         });
         for(auto a = newRankings.begin(); a != newRankings.end(); a++) rankings.push_back(*a);
+        if (!quiet_output) {
+            std::cout << "Territory: ";
+            for(unsigned char a = 0; a < number_of_players; a++) {
+                std::cout << last_territory_count[a] << " ";
+            }
+            std::cout << std::endl;
+        }
         result = newResult;
     }
     std::vector<unsigned int> newRankings;
