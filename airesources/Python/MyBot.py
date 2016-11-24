@@ -1,3 +1,5 @@
+import random
+
 from hlt import *
 from networking import *
 
