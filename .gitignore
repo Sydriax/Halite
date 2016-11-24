@@ -287,6 +287,11 @@ docs/_build/
 # PyBuilder
 target/
 
+###############
+## JetBrains ##
+###############
+.idea/
+
 #############
 ## Clojure ##
 #############

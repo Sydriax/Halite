@@ -1,4 +1,3 @@
-import random
 import math
 import copy
 
@@ -18,11 +17,29 @@ class Location:
     def __init__(self, x=0, y=0):
         self.x = x
         self.y = y
+
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return self.__dict__ == other.__dict__
+        raise NotImplementedError
+
+    def __ne__(self, other):
+        if isinstance(other, self.__class__):
+            return not self.__eq__(other)
+        raise NotImplementedError
+
+    def __repr__(self):
+        return self.__str__()
+
+    def __str__(self):
+        return "({}, {})".format(self.x, self.y)
+
 class Site:
     def __init__(self, owner=0, strength=0, production=0):
         self.owner = owner
         self.strength = strength
         self.production = production
+
 class Move:
     def __init__(self, loc=0, direction=0):
         self.loc = loc
@@ -91,6 +108,7 @@ class GameMap:
                 else:
                     l.x -= 1
         return l
+
     def getSite(self, l, direction = STILL):
         l = self.getLocation(l, direction)
         return self.contents[l.y][l.x]
