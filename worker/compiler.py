@@ -252,7 +252,7 @@ comp_args = {
     "D"             : [["dmd", "-O", "-inline", "-release", "-noboundscheck", "-of" + BOT]],
     "Groovy"    : [["groovyc"],
                              ["jar", "cfe", BOT + ".jar", BOT]],
-    "Haskell" : [["ghc", "--make", BOT + ".hs", "-O", "-v0"]],
+    "Haskell" : [["cabal", "configure"], ["cabal", "build"]],
     "Java"        : [["javac", "-encoding", "UTF-8", "-J-Xmx%sm" % (MEMORY_LIMIT)]],
     "Lisp"      : [['sbcl', '--dynamic-space-size', str(MEMORY_LIMIT), '--script', BOT + '.lisp']],
     "OCaml"     : [["ocamlbuild -lib unix", BOT + ".native"]],
@@ -340,7 +340,7 @@ languages = (
         [(["*.groovy"], ExternalCompiler(comp_args["Groovy"][0])),
         (["*.class"], ExternalCompiler(comp_args["Groovy"][1]))]
     ),
-    Language("Haskell", BOT, "MyBot.hs",
+    Language("Haskell", "src/"+BOT, "src/MyBot.hs",
         "./MyBot +RTS -M" + str(MEMORY_LIMIT) + "m",
         [BOT],
         [([""], ExternalCompiler(comp_args["Haskell"][0]))]

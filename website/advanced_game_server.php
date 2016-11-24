@@ -39,6 +39,8 @@
                             <li>Python - .py</li>
                             <li>C++ - .cpp and .h(pp)</li>
                             <li>C# - .cs</li>
+                            <li>Go - .go</li>
+                            <li>Haskell - .hs</li>
                             <li>Rust - .toml (for your Cargo.toml) and .rs (for your Rust source)</li>
                             <li>Scala - .scala</li>
                             <li>Ruby - .rb</li>
@@ -55,6 +57,7 @@
                             <li>Java - javac 1.8.0_111</li>
                             <li>C++ - g++ 4.84</li>
                             <li>C# - mcs 4.6.1.0</li>
+                            <li>Haskell - ghc 8.0.1</li>
                             <li>Rust - rustc 1.10.0</li>
                             <li>Scala - scalac 2.10.4</li>
                         </ul>
@@ -63,6 +66,7 @@
                     <p>
                         The following build automators are used:
                         <ul>
+                            <li>Haskell - stack 1.2.0</li>
                             <li>Rust - cargo 0.11.0</li>
                         </ul>
                     </p>
@@ -74,6 +78,8 @@
                             <li>Python 3.4.3</li>
                             <li>C++ 11</li>
                             <li>C# 6.0</li>
+                            <li>Go 1.6</li>
+                            <li>Haskell 8.0.1</li>
                             <li>Rust 1.10</li>
                             <li>Scala 2.10.4</li>
                             <li>Ruby 2.3.1</li>
