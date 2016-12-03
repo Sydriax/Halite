@@ -5,7 +5,7 @@ apt-get update
 apt-get install -y python3 
 
 # Java
-apt-get install -y openjdk-7-jdk libjansi-java
+apt-get install -y openjdk-8-jre libjansi-java
 
 # Rust
 curl -sSf https://static.rust-lang.org/rustup.sh | sh 

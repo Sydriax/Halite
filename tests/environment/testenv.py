@@ -55,6 +55,9 @@ if splines[9] != " " or splines[10] != " ":
 else:
     print('Starter package test succeeded.')
 
+splines = subprocess.Popen('cat *.log', stdout=subprocess.PIPE, shell = True).stdout.read().decode('utf-8').split('\n')
+print('\n'.join(splines))
+
 # Ensures that tie evaluation is correct. Confirm that the bot expected to win does indeed win.
 tielines = subprocess.Popen('../../environment/halite -d "10 10" -q "python3 ModBot.py" "python3 ModBot.py" -s 998', stdout=subprocess.PIPE, shell = True).stdout.read().decode('utf-8').split('\n')
 if tielines[3].split()[1] != "2" or tielines[4].split()[1] != "1" or tielines[5] != " " or tielines[6] != " ":
