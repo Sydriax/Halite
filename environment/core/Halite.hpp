@@ -15,6 +15,7 @@
 #include "../networking/Networking.hpp"
 
 extern bool quiet_output;
+extern bool silent_output;
 
 struct PlayerStatistics {
     int tag;

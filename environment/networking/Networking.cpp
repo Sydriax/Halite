@@ -330,7 +330,7 @@ int Networking::handleInitNetworking(unsigned char playerTag, const hlt::Map & m
         sendString(playerTag, prodString);
         sendString(playerTag, mapString);
         std::string outMessage = "Init Message sent to player " + std::to_string(int(playerTag)) + ".\n";
-        if(!quiet_output) std::cout << outMessage;
+        if(!quiet_output && !silent_output) std::cout << outMessage;
 
         player_logs[playerTag - 1] += " --- Init ---\n";
 
@@ -341,7 +341,7 @@ int Networking::handleInitNetworking(unsigned char playerTag, const hlt::Map & m
         player_logs[playerTag - 1] += response + "\n --- Bot used " + std::to_string(millisTaken) + " milliseconds ---";
 
         *playerName = response.substr(0, 30);
-        if(!quiet_output) {
+        if(!quiet_output && !silent_output) {
             std::string inMessage = "Init Message received from player " + std::to_string(int(playerTag)) + ", " + *playerName + ".\n";
             std::cout << inMessage;
         }
@@ -448,7 +448,7 @@ void Networking::killPlayer(unsigned char playerTag) {
     connections[playerTag - 1].write = NULL;
 
     std::string deadMessage = "Player " + std::to_string(playerTag) + " is dead\n";
-    if(!quiet_output) std::cout << deadMessage;
+    if(!quiet_output && !silent_output) std::cout << deadMessage;
 
 #else
 

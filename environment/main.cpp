@@ -23,6 +23,7 @@ template<> struct ArgTraits< std::pair<signed int, signed int> > {
 }
 
 bool quiet_output = false; //Need to be passed to a bunch of classes; extern is cleaner.
+bool silent_output = false; //Actual peace and quiet ;^)
 Halite * my_game; //Is a pointer to avoid problems with assignment, dynamic memory, and default constructors.
 
 Networking promptNetworking();
@@ -44,7 +45,8 @@ int main(int argc, char ** argv) {
     TCLAP::CmdLine cmd("Halite Game Environment", ' ', "1.0.1");
 
     //Switch Args.
-    TCLAP::SwitchArg quietSwitch("q", "quiet", "Runs game in quiet mode, producing machine-parsable output.", cmd, false);
+    TCLAP::SwitchArg quietSwitch("m", "machine", "Produces machine output only.", cmd, false);
+    TCLAP::SwitchArg silentSwitch("v", "silent", "Produces no output.", cmd, false);
     TCLAP::SwitchArg overrideSwitch("o", "override", "Overrides player-sent names using cmd args [SERVER ONLY].", cmd, false);
     TCLAP::SwitchArg timeoutSwitch("t", "timeout", "Causes game environment to ignore timeouts (give all bots infinite time).", cmd, false);
 
@@ -65,6 +67,8 @@ int main(int argc, char ** argv) {
     else seed = (std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count() % 4294967295);
 
     quiet_output = quietSwitch.getValue();
+    silent_output = silentSwitch.getValue();
+    std::cout << "b4?" << std::endl;
     bool override_names = overrideSwitch.getValue();
     bool ignore_timeout = timeoutSwitch.getValue();
 
@@ -126,11 +130,12 @@ int main(int argc, char ** argv) {
     if(names != NULL) delete names;
 
     std::string victoryOut;
-    if(quiet_output) {
+    if(!silent_output) {
+      if(quiet_output) {
         std::cout << stats;
-    }
-    else {
+      } else {
         for(unsigned int a = 0; a < stats.player_statistics.size(); a++) std::cout << "Player #" << stats.player_statistics[a].tag << ", " << my_game->getName(stats.player_statistics[a].tag) << ", came in rank #" << stats.player_statistics[a].rank << "!\n";
+      }
     }
 
     delete my_game;
@@ -169,7 +174,8 @@ Networking promptNetworking() {
             }
         }
 
-        std::cout << "Connected to player #" << int(np + 1) << std::endl;
+        if(!silent_output)
+          std::cout << "Connected to player #" << int(np + 1) << std::endl;
     }
     return n;
 }
