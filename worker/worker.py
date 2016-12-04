@@ -82,9 +82,6 @@ def executeCompileTask(user, backend):
                 shutil.move(os.path.join(bufferFolder, filename), os.path.join(workingPath, filename))
             os.rmdir(bufferFolder)
 
-        # Rm symlinks
-        os.system("find "+workingPath+" -type l -delete")
-
         language, errors = compile_anything(workingPath)
         didCompile = True if errors == None else False
     except Exception as e:

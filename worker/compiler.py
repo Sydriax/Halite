@@ -72,6 +72,7 @@ def _run_cmd(cmd, working_dir, timelimit):
     try:
         rawOut, rawErrors = process.communicate(timeout=timelimit)
         outString = rawOut.decode("utf-8").strip()
+        print(outString)
         out = outString.split("\n") if outString.isspace() == False and outString != "" else None
 
         errorsString = rawErrors.decode("utf-8").strip()
@@ -509,8 +510,33 @@ def get_run_lang(submission_dir):
                         return line[1:-1]
 
 def compile_anything(bot_dir, installTimeLimit=600, timelimit=600, max_error_len = 3072):
+    def limitErrors(errors):
+        # limit length of reported errors
+        if len(errors) > 0 and sum(map(len, errors)) > max_error_len:
+            first_errors = []
+            cur_error = 0
+            length = len(errors[0])
+            while length < (max_error_len / 3): # take 1/3 from start
+                first_errors.append(errors[cur_error])
+                cur_error += 1
+                length += len(errors[cur_error])
+            first_errors.append("...")
+            length += 3
+            end_errors = []
+            cur_error = -1
+            while length <= max_error_len:
+                end_errors.append(errors[cur_error])
+                cur_error -= 1
+                length += len(errors[cur_error])
+            end_errors.reverse()
+            errors = first_errors + end_errors
+        return errors
+
     if os.path.exists(os.path.join(bot_dir, "install.sh")):
         _, errors = _run_cmd("chmod +x install.sh; ./install.sh", bot_dir, installTimeLimit)
+        if errors is not None:
+            return "Unknown", limitErrors(errors)
+
     detected_language, errors = detect_language(bot_dir)
     print("detected language")
     if detected_language:
@@ -524,8 +550,9 @@ def compile_anything(bot_dir, installTimeLimit=600, timelimit=600, max_error_len
             print("filename:")
             print(run_filename)
             try:
-                with open(run_filename, 'wb') as f:
-                    f.write(bytes('#%s\n%s\n' % (name, run_cmd), 'UTF-8'))
+                if os.path.isfile(run_filename) == False:
+                    with open(run_filename, 'wb') as f:
+                        f.write(bytes('#%s\n%s\n' % (name, run_cmd), 'UTF-8'))
                 print("file:")
                 with open(run_filename, 'r') as f:
                     for line in f:
@@ -540,27 +567,7 @@ def compile_anything(bot_dir, installTimeLimit=600, timelimit=600, max_error_len
                 name = override_name
             return name, None
         else:
-            # limit length of reported errors
-            if len(errors) > 0 and sum(map(len, errors)) > max_error_len:
-                first_errors = []
-                cur_error = 0
-                length = len(errors[0])
-                while length < (max_error_len / 3): # take 1/3 from start
-                    first_errors.append(errors[cur_error])
-                    cur_error += 1
-                    length += len(errors[cur_error])
-                first_errors.append("...")
-                length += 3
-                end_errors = []
-                cur_error = -1
-                while length <= max_error_len:
-                    end_errors.append(errors[cur_error])
-                    cur_error -= 1
-                    length += len(errors[cur_error])
-                end_errors.reverse()
-                errors = first_errors + end_errors
-
-            return detected_language.name, errors
+            return detected_language.name, limitErrors(errors)
     else:
         return "Unknown", errors
 
