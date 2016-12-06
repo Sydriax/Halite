@@ -77,7 +77,7 @@ DROP TABLE IF EXISTS `PairingUser`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `PairingUser` (
   `pairingID` mediumint(8) unsigned NOT NULL,
-  `userID` mediumint(8) unsigned NOT NULL,
+  `userID` mediumint(8) unsigned NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
