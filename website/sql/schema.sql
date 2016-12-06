@@ -54,6 +54,34 @@ CREATE TABLE `GameUser` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `Pairing`
+--
+
+DROP TABLE IF EXISTS `Pairing`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Pairing` (
+  `pairingID` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `workerID` mediumint(8) unsigned NOT NULL,
+  `timestamp` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`pairingID`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `PairingUser`
+--
+
+DROP TABLE IF EXISTS `PairingUser`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `PairingUser` (
+  `pairingID` mediumint(8) unsigned NOT NULL,
+  `userID` mediumint(8) unsigned NOT NULL,
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `User`
 --
 

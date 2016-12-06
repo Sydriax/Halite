@@ -157,8 +157,11 @@ def parseGameOutput(output, users):
 
     return users, replayPath, errorPaths
 
-def executeGameTask(width, height, users, backend):
+def executeGameTask(gameTask, backend):
     """Downloads compiled bots, runs a game, and posts the results of the game"""
+    width = int(gameTask["width"])
+    height = int(gameTask["height"])
+    users = gameTask["users"]
     print("Running game with width %d, height %d, and users %s" % (width, height, str(users)))
 
     downloadUsers(users)
@@ -171,7 +174,7 @@ def executeGameTask(width, height, users, backend):
     fIn.close()
     fOut.close()
 
-    backend.gameResult(width, height, users, replayArchivePath, errorPaths)
+    backend.gameResult(gameTask["pairingID"], width, height, users, replayArchivePath, errorPaths)
     filelist = glob.glob("*.log")
     for f in filelist:
         os.remove(f)
@@ -189,7 +192,7 @@ if __name__ == "__main__":
                 if task["type"] == "compile":
                     executeCompileTask(task["user"], backend)
                 else:
-                    executeGameTask(int(task["width"]), int(task["height"]), task["users"], backend)
+                    executeGameTask(task, backend)
             else:
                 print("No task available. Sleeping...")
                 sleep(2)
