@@ -32,9 +32,11 @@ sshpass`.
 # Running the playbook
 
 After getting the prerequisites setup above, to deploy to the server simply run:
+
     ansible-playbook -i inventory primary.yml
 
 If you need to specify an ssh password, use the -k option. Similarly if a sudo
 password is need use -K. For example if you need both ssh and sudo passwords it
 would look something like:
+
     ansible-playbook -i inventory primary.yml -k -K
