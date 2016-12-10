@@ -67,9 +67,9 @@ class ManagerAPI extends API{
 
     private function clearPairing() {
         if(isset($_POST['pairingID'])) {
-            $pairingID = $_POST['pairingID'];
+            $pairingID = this->mysqli->real_escape_string($_POST['pairingID']);
             $this->insert("DELETE FROM PairingUser WHERE pairingID={$pairingID}");
-            $this->insert("DELETE FROM Pairing WHERE gameID={$pairingID}");
+            $this->insert("DELETE FROM Pairing WHERE pairingID={$pairingID}");
         }
     }
 
@@ -116,10 +116,12 @@ class ManagerAPI extends API{
             $worker = $this->select("SELECT * FROM Worker WHERE apiKey=".$this->mysqli->real_escape_string($this->apiKey)." LIMIT 1");
             $this->insert("INSERT INTO Pairing (workerID) VALUES (".$worker["workerID"].")");
             $pairing = $this->select("SELECT * FROM Pairing WHERE workerID=".$worker["workerID"]." ORDER BY pairingID DESC LIMIT 1");
-            $playerInsert = "INSERT INTO PairingUser (pairingID, userID) VALUES ";
+            $playerValues = array();
             foreach($players as $player) {
-                $playerInsert .= "(".$pairing["pairingID"].", ".$player["userID"]."),";
+                $playerValues[] = "(".$pairing["pairingID"].", ".$player["userID"].")";
             }
+            $playerValues = implode(",", $playerValues);
+            $playerInsert = "INSERT INTO PairingUser (pairingID, userID) VALUES ".$playerValues;
             $this->insert($playerInsert);
 
             // Send game task
