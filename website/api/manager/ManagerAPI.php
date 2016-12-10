@@ -126,6 +126,7 @@ class ManagerAPI extends API{
             if(count($players) == $numPlayers) {
                 return array(
                     "type" => "game",
+                    "pairingID" => $pairing["pairingID"],
                     "width" => $size,
                     "height" => $size,
                     "users" => $players
