@@ -182,7 +182,7 @@ def executeGameTask(gameTask, backend):
     os.remove(replayPath)
     os.remove(replayArchivePath)
 
-if __name__ == "__main__":
+def main():
     print("Starting up worker...")
     while True:
         try:
@@ -202,3 +202,5 @@ if __name__ == "__main__":
             print("Sleeping...")
             sleep(2)
 
+if __name__ == "__main__":
+    main()
