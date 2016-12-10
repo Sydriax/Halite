@@ -120,7 +120,7 @@ class ManagerAPI extends API{
             foreach($players as $player) {
                 $playerInsert .= "(".$pairing["pairingID"].", ".$player["userID"]."),";
             }
-            $this.insert($playerInsert);
+            $this->insert($playerInsert);
 
             // Send game task
             if(count($players) == $numPlayers) {
