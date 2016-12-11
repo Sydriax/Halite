@@ -67,7 +67,7 @@ class ManagerAPI extends API{
 
     private function clearPairing() {
         if(isset($_POST['pairingID'])) {
-            $pairingID = this->mysqli->real_escape_string($_POST['pairingID']);
+            $pairingID = $this->mysqli->real_escape_string($_POST['pairingID']);
             $this->insert("DELETE FROM PairingUser WHERE pairingID={$pairingID}");
             $this->insert("DELETE FROM Pairing WHERE pairingID={$pairingID}");
         }
@@ -95,7 +95,7 @@ class ManagerAPI extends API{
             $seedPlayer = null;
             $randValue = mt_rand() / mt_getrandmax();
             if($randValue > 0.5) {
-                $seedPlayer = $this->select("SELECT u.* FROM (SELECT MAX(p.timestamp) as maxTime, pu.userID as userID from PairingUser pu INNER JOIN Pairing p ON p.pairingID = pu.pairingID GROUP BY pu.userID) temptable INNER JOIN User u on u.userID = temptable.userID WHERE maxTime < DATE_SUB(NOW(), INTERVAL 10 MINUTE) AND isRunning = 1 order by rand()*-pow(sigma, 2) LIMIT 1");
+                $seedPlayer = $this->select("SELECT u.* FROM (SELECT MAX(p.timestamp) as maxTime, pu.userID as userID from PairingUser pu INNER JOIN Pairing p ON p.pairingID = pu.pairingID GROUP BY pu.userID) temptable RIGHT JOIN User u on u.userID = temptable.userID WHERE (maxTime IS NULL OR maxTime < DATE_SUB(NOW(), INTERVAL 10 MINUTE)) AND isRunning = 1 order by rand()*-pow(sigma, 2) LIMIT 1");
             }
             if ($randValue > 0.25 && $randValue <= 0.5) {
                 $seedPlayer = $this->select("SELECT * FROM (SELECT u.* FROM (SELECT MAX(g.timestamp) as maxTime, gu.userID as userID FROM GameUser gu INNER JOIN Game g ON g.gameID=gu.gameID GROUP BY gu.userID) temptable INNER JOIN User u on u.userID = temptable.userID where numGames < 400 order by maxTime ASC limit 15) orderedTable order by rand() limit 1;");
