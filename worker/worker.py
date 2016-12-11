@@ -181,7 +181,7 @@ def main():
                     executeCompileTask(task["user"], backend)
                 else:
                     print("Running a game task...\n")
-                    executeGameTask(task,, backend)
+                    executeGameTask(task, backend)
             else:
                 print("No task available at time %s (GMT). Sleeping...\n" % str(strftime("%Y-%m-%d %H:%M:%S", gmtime())))
                 sleep(2)
