@@ -7,52 +7,38 @@ class Networking {
   var width : Int = 0
   var height : Int = 0
 
-  val productions = ArrayList<ArrayList<Int>>()
+  val productions : MutableList<MutableList<Int>> = arrayListOf()
 
-  internal fun deserializeGameMapSize(inputString: String) {
-    val map = inputString.split(" ")
-
-    width = Integer.parseInt(map[0])
-    height = Integer.parseInt(map[1])
+  fun deserializeGameMapSize(inputString: String) {
+    inputString.split(" ")
+        .map { Integer.parseInt(it) }
+        .forEachIndexed { index, size ->
+          if (index == 0) width = size else height = size}
   }
 
-
-  internal fun deserializeProductions(inputString: String) {
-    val input = inputString.split(" ")
-
-    var index = 0
-    for (a in 0..height - 1) {
-      val row = ArrayList<Int>()
-      for (b in 0..width - 1) {
-        row.add(Integer.parseInt(input[index]))
-        index++
-      }
-      productions.add(row)
-    }
+  fun deserializeProductions(input: String) {
+    val inputs = input.split(" ").map { Integer.parseInt(it) }
+    (0 until height).mapTo(productions) { inputs.subList(it * width, (it + 1) * width).toMutableList() }
   }
 
-  internal fun serializeMoveList(moves: ArrayList<Move>): String {
+  fun serializeMoveList(moves: ArrayList<Move>): String {
     val builder = StringBuilder()
     for ((loc, dir) in moves) builder.append(loc.x.toString() + " " + loc.y + " " + dir.ordinal + " ")
     return builder.toString()
   }
 
-  internal fun deserializeGameMap(inputString: String): GameMap {
-    val input = inputString.split(" ")
+  fun deserializeGameMap(input: String): GameMap {
+    val inputs = input.split(" ").map { Integer.parseInt(it) }
 
     val map = GameMap(width, height)
 
-    // Run-length encode of owners
     var y = 0
     var x = 0
-    var counter = 0
-    var owner = 0
     var currentIndex = 0
-    while (y != map.height) {
-      counter = Integer.parseInt(input[currentIndex])
-      owner = Integer.parseInt(input[currentIndex + 1])
-      currentIndex += 2
-      for (a in 0..counter - 1) {
+    while (y < map.height) {
+      val counter = inputs[currentIndex++]
+      val owner = inputs[currentIndex++]
+      (0 until counter).forEach {
         map.contents[y][x].owner = owner
         ++x
         if (x == map.width) {
@@ -62,58 +48,39 @@ class Networking {
       }
     }
 
-    for (a in 0..map.contents.size - 1) {
-      for (b in 0..map.contents[a].size - 1) {
-        val strengthInt = Integer.parseInt(input[currentIndex])
-        currentIndex++
-        map.contents[a][b].strength = strengthInt
-        map.contents[a][b].production = productions[a][b]
+    for (x in 0 until map.contents.size) {
+      for (y in 0 until map.contents[x].size) {
+        map.contents[x][y].strength = inputs[currentIndex++]
+        map.contents[x][y].production = productions[x][y]
       }
     }
 
     return map
   }
 
-  internal fun sendString(sendString: String) {
-    print(sendString + '\n')
+  fun sendString(sendString: String) {
+    println(sendString)
     System.out.flush()
   }
 
-  internal fun getString(): String? {
-    val builder = StringBuilder()
-    var buffer = 0
-    while (true) {
-      buffer = System.`in`.read()
-      if (buffer < 0 || buffer == '\n'.toInt()) {
-        break
-      }
-      builder.append(buffer.toChar())
-    }
-    //Removes a carriage return if on windows for manual testing.
-    if (builder[builder.length - 1] == '\r') {
-      builder.setLength(builder.length - 1)
-    }
-    return builder.toString()
-  }
-
-  internal fun getInit(): InitPackage {
-    val myID = Integer.parseInt(getString()!!).toInt()
-    deserializeGameMapSize(getString()!!)
-    deserializeProductions(getString()!!)
-    val map = deserializeGameMap(getString()!!)
+  fun getInit(): InitPackage {
+    val myID = Integer.parseInt(readLine()?.trim())
+    deserializeGameMapSize(readLine()!!.trim())
+    deserializeProductions(readLine()!!.trim())
+    val map = deserializeGameMap(readLine()!!.trim())
 
     return InitPackage(myID, map)
   }
 
-  internal fun sendInit(name: String) {
+  fun sendInit(name: String) {
     sendString(name)
   }
 
-  internal fun getFrame(): GameMap {
-    return deserializeGameMap(getString()!!)
+  fun getFrame(): GameMap {
+    return deserializeGameMap(readLine()!!.trim())
   }
 
-  internal fun sendFrame(moves: ArrayList<Move>) {
+  fun sendFrame(moves: ArrayList<Move>) {
     sendString(serializeMoveList(moves))
   }
 }
@@ -138,15 +105,11 @@ enum class Direction {
 
 class GameMap(val width: Int, val height: Int) {
 
-  val contents = ArrayList<ArrayList<Site>>()
+  val contents : MutableList<MutableList<Site>> = arrayListOf()
 
   init {
-    for (y in 0..height - 1) {
-      val row = ArrayList<Site>()
-      for (x in 0..width - 1) {
-        row.add(Site(0, 0, 0))
-      }
-      contents.add(row)
+    (0 until height).forEach {
+      contents.add(Array(width, {Site(0, 0, 0)}).toMutableList())
     }
   }
 
