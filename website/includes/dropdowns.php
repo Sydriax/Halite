@@ -1,5 +1,5 @@
 <li>
-  <a href="basics_quickstart.php">Learn</a>
+  <a href="basics_quickstart.php">Docs</a>
 </li>
 <li>
   <a href="downloads.php">Download</a>

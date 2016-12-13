@@ -63,10 +63,13 @@
             </ul>
         </li>
         <li class="">
-            <span>Guides</span>
+            <span>Advanced Guides</span>
             <ul class="nav nav-stacked">
+                <li id="guides_libraries">
+                    <a href="guides_libraries.php">Machine Learning and Halite</a>
+                </li>
                 <li id="guides_development">
-                    <a href="guides_development.php">Bot Development</a>
+                    <a href="guides_development.php">Local Development Tips</a>
                 </li>
                 <li id="guides_libraries">
                     <a href="guides_libraries.php">Using 3rd Party Libraries</a>
@@ -74,33 +77,28 @@
                 <li id="guides_strategy">
                     <a href="guides_strategy.php">Strategy Considerations</a>
                 </li>
-            </ul>
-        </li>
-        <li class="">
-            <span>Rules</span>
-            <ul class="nav nav-stacked">
-                <li id="rules_game">
-                    <a href="rules_game.php">Game Rules</a>
-                </li>
-                <li id="rules_contest">
-                    <a href="rules_contest.php">Contest Rules</a>
-                </li>
-            </ul>
-        </li>
-        <li class="">
-            <span>Advanced</span>
-            <ul class="nav nav-stacked">
-                <li id="advanced_command_line">
-                    <a href="advanced_command_line.php">Environment Command Reference</a>
-                </li>
-                <li id="advanced_replay_file">
-                    <a href="advanced_replay_file.php">Replay File Reference</a>
-                </li>
-                <li id="advanced_game_server">
-                    <a href="advanced_game_server.php">Game Server Reference</a>
-                </li>
                 <li id="advanced_writing_sp">
-                    <a href="advanced_writing_sp.php">Writing Your Own Starter Package</a>
+                    <a href="guides_writing_sp.php">Writing Your Own Starter Package</a>
+                </li>
+            </ul>
+        </li>
+        <li class="">
+            <span>Reference</span>
+            <ul class="nav nav-stacked">
+                <li id="ref_command_line">
+                    <a href="ref_command_line.php">Environment Command Line</a>
+                </li>
+                <li id="ref_replay_file">
+                    <a href="ref_replay_file.php">Replay Files</a>
+                </li>
+                <li id="ref_compilation">
+                    <a href="ref_compilation.php">Server-Side Compilation</a>
+                </li>
+                <li id="ref_game_server">
+                    <a href="ref_game_server.php">Game Servers</a>
+                </li>
+                <li id="ref_rules">
+                    <a href="ref_rules.php">Rules</a>
                 </li>
             </ul>
         </li>
