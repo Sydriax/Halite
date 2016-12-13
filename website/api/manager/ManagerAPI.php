@@ -65,12 +65,10 @@ class ManagerAPI extends API{
         return floatval($lines[0]);
     }
 
-    private function clearPairing() {
-        if(isset($_POST['pairingID'])) {
-            $pairingID = $this->mysqli->real_escape_string($_POST['pairingID']);
-            $this->insert("DELETE FROM PairingUser WHERE pairingID={$pairingID}");
-            $this->insert("DELETE FROM Pairing WHERE pairingID={$pairingID}");
-        }
+    private function clearPairing($pairingID) {
+        $pairingID = $this->mysqli->real_escape_string($pairingID);
+        $this->insert("DELETE FROM PairingUser WHERE pairingID={$pairingID}");
+        $this->insert("DELETE FROM Pairing WHERE pairingID={$pairingID}");
     }
 
     /////////////////////////API ENDPOINTS\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -182,7 +180,9 @@ class ManagerAPI extends API{
                 $storedUser = $this->select("SELECT * FROM User WHERE userID=".$this->mysqli->real_escape_string($user->userID));
                 array_push($storedUsers, $storedUser);
                 if(intval($storedUser['numSubmissions']) != intval($user->numSubmissions)) {
-                    $this->clearPairing();
+                    if(isset($_POST['pairingID'])) {
+                        $this->clearPairing($_POST['pairingID']);
+                    }
                     return null;
                 }
             }
@@ -283,7 +283,9 @@ class ManagerAPI extends API{
                 $this->insert("UPDATE User SET rank={$rank} WHERE userID={$allUsers[$userIndex]['userID']}");
             }
 
-            $this->clearPairing();
+            if(isset($_POST['pairingID'])) {
+                $this->clearPairing($_POST['pairingID']);
+            }
         }
     }
 
