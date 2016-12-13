@@ -2,6 +2,7 @@
     "require": {
         "lusitanian/oauth": "~0.3",
         "swiftmailer/swiftmailer": "^5.4.3",
-        "aws/aws-sdk-php": "^3.19"
+        "aws/aws-sdk-php": "^3.19",
+        "erusev/parsedown": "^1.6.1"
     }
 }

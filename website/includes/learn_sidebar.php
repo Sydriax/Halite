@@ -25,19 +25,20 @@
     }
 
     /* active & hover links */
-    .bs-docs-sidebar .nav>.active>a, 
-    .bs-docs-sidebar .nav>li>a:hover, 
+    .bs-docs-sidebar .nav>.active>a,
+    .bs-docs-sidebar .nav>li>a:hover,
     .bs-docs-sidebar .nav>li>a:focus {
-        text-decoration: none;          
-        background-color: transparent;  
+        text-decoration: none;
+        background-color: transparent;
+        border-left-color: #63ceca;
     }
 
     /* nested active links */
-    .bs-docs-sidebar .nav .nav>.active>a, 
+    .bs-docs-sidebar .nav .nav>.active>a,
     .bs-docs-sidebar .nav .nav>.active:hover>a,
     .bs-docs-sidebar .nav .nav>.active:focus>a {
         font-weight: 700;
-        border-left-color: #63ceca; 
+        border-left-color: #63ceca;
         font-weight: 500;
     }
 
@@ -45,64 +46,84 @@
 
 <nav class="col-sm-3 bs-docs-sidebar">
     <ul id="sidebar" class="nav nav-stacked">
-        <li class="">
-            <span>The Basics</span>
+        <li id="quickstart">
+            <a href="quickstart.php">Quickstart</a>
             <ul class="nav nav-stacked">
-                <li id="basics_quickstart">
-                    <a href="basics_quickstart.php">Getting Started</a>
-                </li>
-                <li id="basics_intro_halite">
-                    <a href="basics_intro_halite.php">Introducing Halite</a>
-                </li>
-                <li id="basics_improve_random">
-                    <a href="basics_improve_random.php">Improving the Random Bot</a>
-                </li>
-                <li id="basics_faqs">
-                    <a href="basics_faqs.php">FAQs</a>
+                <li id="quickstart_dive_in">
+                    <a href="quickstart.php#dive_in">Dive In</a>
                 </li>
             </ul>
         </li>
-        <li class="">
-            <span>Guides</span>
+        <li id="game_overview">
+            <a href="game_overview.php">Game Overview</a>
             <ul class="nav nav-stacked">
-                <li id="guides_development">
-                    <a href="guides_development.php">Bot Development</a>
+                <li id="game_overview_what_is_halite">
+                    <a href="game_overview.php#what_is_halite">What is Halite?</a>
                 </li>
-                <li id="guides_libraries">
-                    <a href="guides_libraries.php">Using 3rd Party Libraries</a>
-                </li>
-                <li id="guides_strategy">
-                    <a href="guides_strategy.php">Strategy Considerations</a>
+                <li id="game_overview_game_rules">
+                    <a href="game_overview.php#game_rules">Game Rules</a>
                 </li>
             </ul>
         </li>
-        <li class="">
-            <span>Rules</span>
+        <li id="bot_overview">
+            <a href="bot_overview.php">Bot Overview</a>
             <ul class="nav nav-stacked">
-                <li id="rules_game">
-                    <a href="rules_game.php">Game Rules</a>
-                </li>
-                <li id="rules_contest">
-                    <a href="rules_contest.php">Contest Rules</a>
+                <li id="bot_overview_a_bots_life">
+                    <a href="bot_overview.php#a_bots_life">A Bot's Life</a>
                 </li>
             </ul>
         </li>
-        <li class="">
-            <span>Advanced</span>
+        <li id="developing_a_bot">
+            <a href="developing_a_bot.php">Developing A Bot</a>
             <ul class="nav nav-stacked">
-                <li id="advanced_command_line">
-                    <a href="advanced_command_line.php">Environment Command Reference</a>
+                <li id="developing_a_bot_local_development_environment">
+                    <a href="developing_a_bot.php#local_development_environment">Local Development Environment</a>
                 </li>
+                <li id="developing_a_bot_submitting_a_bot">
+                    <a href="developing_a_bot.php#submitting_a_bot">Submitting A Bot</a>
+                </li>
+            </ul>
+        </li>
+        <li id="tournament_overview">
+            <a href="tournament_overview.php">Tournament Overview</a>
+            <ul class="nav nav-stacked">
+                <li id="tournament_overview_about_the_tournament">
+                    <a href="tournament_overview.php#about_the_tournament">About the Tournament</a>
+                </li>
+            </ul>
+        </li>
+        <li id="server_overview">
+            <a href="server_overview.php">Server Overview</a>
+            <ul class="nav nav-stacked">
+                <li id="server_overview_hardware">
+                    <a href="server_overview.php#hardware">Hardware</a>
+                </li>
+                <li id="server_overview_software">
+                    <a href="server_overview.php#software">Software</a>
+                </li>
+            </ul>
+        </li>
+        <li id="tutorials">
+            <a href="tutorials.php">Tutorials</a>
+            <ul class="nav nav-stacked">
+                <li id="tutorials_improving_the_random_bot">
+                    <a href="tutorials.php#improving_the_random_bot">Improving The Random Bot</a>
+                </li>
+            </ul>
+        </li>
+        <li id="reference">
+            <span>Reference</span>
+            <ul class="nav nav-stacked">
                 <li id="advanced_replay_file">
-                    <a href="advanced_replay_file.php">Replay File Reference</a>
-                </li>
-                <li id="advanced_game_server">
-                    <a href="advanced_game_server.php">Game Server Reference</a>
+                    <a href="advanced_replay_file.php">Replay File Format</a>
                 </li>
                 <li id="advanced_writing_sp">
                     <a href="advanced_writing_sp.php">Writing Your Own Starter Package</a>
                 </li>
             </ul>
+        </li>
+        <li id="faqs">
+            <a href="faqs.php">FAQs</a>
         </li>
     </ul>
     <hr>
@@ -113,6 +134,28 @@
     var fileName = location.pathname.substring(location.pathname.lastIndexOf("/") + 1);
     document.getElementById("githubLink").href = "https://github.com/HaliteChallenge/Halite/blob/master/website/"+fileName;
 
-    var name = fileName.split(".")[0];
-    document.getElementById(name).className = "active";
+    function markNavActive(event) {
+        var name = fileName.split(".")[0];
+
+        if (event) {
+            var l = document.createElement("a");
+            l.href = event.oldURL;
+            if (l.hash) {
+                document.getElementById(name + "_" + l.hash.substr(1)).removeAttribute("class")
+            } else {
+                document.getElementById(name).removeAttribute("class")
+            }
+        }
+
+        if (location.hash) {
+            document.getElementById(name).removeAttribute("class")
+            document.getElementById(name + "_" + location.hash.substr(1)).className = "active"
+        } else {
+            document.getElementById(name).className = "active"
+        }
+    }
+
+    markNavActive();
+
+    window.addEventListener("hashchange", markNavActive, false);
 </script>
