@@ -65,10 +65,10 @@ class ManagerAPI extends API{
         return floatval($lines[0]);
     }
 
-    private function clearPairing($pairingID) {
-        $pairingID = $this->mysqli->real_escape_string($pairingID);
-        $this->insert("DELETE FROM PairingUser WHERE pairingID={$pairingID}");
-        $this->insert("DELETE FROM Pairing WHERE pairingID={$pairingID}");
+    private function clearGameTask($gametaskID) {
+        $gametaskID = $this->mysqli->real_escape_string($gametaskID);
+        $this->insert("DELETE FROM GameTaskUser WHERE gametaskID={$gametaskID}");
+        $this->insert("DELETE FROM GameTask WHERE gametaskID={$gametaskID}");
     }
 
     /////////////////////////API ENDPOINTS\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -93,7 +93,7 @@ class ManagerAPI extends API{
             $seedPlayer = null;
             $randValue = mt_rand() / mt_getrandmax();
             if($randValue > 0.5) {
-                $seedPlayer = $this->select("SELECT u.* FROM (SELECT MAX(p.timestamp) as maxTime, pu.userID as userID from PairingUser pu INNER JOIN Pairing p ON p.pairingID = pu.pairingID GROUP BY pu.userID) temptable RIGHT JOIN User u on u.userID = temptable.userID WHERE (maxTime IS NULL OR maxTime < DATE_SUB(NOW(), INTERVAL 10 MINUTE)) AND isRunning = 1 order by rand()*-pow(sigma, 2) LIMIT 1");
+                $seedPlayer = $this->select("SELECT u.* FROM (SELECT MAX(p.timestamp) as maxTime, pu.userID as userID from GameTaskUser pu INNER JOIN GameTask p ON p.gametaskID = pu.gametaskID GROUP BY pu.userID) temptable RIGHT JOIN User u on u.userID = temptable.userID WHERE (maxTime IS NULL OR maxTime < DATE_SUB(NOW(), INTERVAL 10 MINUTE)) AND isRunning = 1 order by rand()*-pow(sigma, 2) LIMIT 1");
             }
             if ($randValue > 0.25 && $randValue <= 0.5) {
                 $seedPlayer = $this->select("SELECT * FROM (SELECT u.* FROM (SELECT MAX(g.timestamp) as maxTime, gu.userID as userID FROM GameUser gu INNER JOIN Game g ON g.gameID=gu.gameID GROUP BY gu.userID) temptable INNER JOIN User u on u.userID = temptable.userID where numGames < 400 and isRunning = 1 order by maxTime ASC limit 15) orderedTable order by rand() limit 1;");
@@ -112,21 +112,21 @@ class ManagerAPI extends API{
 
             // Record pairing
             $worker = $this->select("SELECT * FROM Worker WHERE apiKey=".$this->mysqli->real_escape_string($this->apiKey)." LIMIT 1");
-            $this->insert("INSERT INTO Pairing (workerID) VALUES (".$worker["workerID"].")");
-            $pairing = $this->select("SELECT * FROM Pairing WHERE workerID=".$worker["workerID"]." ORDER BY pairingID DESC LIMIT 1");
+            $this->insert("INSERT INTO GameTask (workerID) VALUES (".$worker["workerID"].")");
+            $pairing = $this->select("SELECT * FROM GameTask WHERE workerID=".$worker["workerID"]." ORDER BY gametaskID DESC LIMIT 1");
             $playerValues = array();
             foreach($players as $player) {
-                $playerValues[] = "(".$pairing["pairingID"].", ".$player["userID"].")";
+                $playerValues[] = "(".$pairing["gametaskID"].", ".$player["userID"].")";
             }
             $playerValues = implode(",", $playerValues);
-            $playerInsert = "INSERT INTO PairingUser (pairingID, userID) VALUES ".$playerValues;
+            $playerInsert = "INSERT INTO GameTaskUser (gametaskID, userID) VALUES ".$playerValues;
             $this->insert($playerInsert);
 
             // Send game task
             if(count($players) == $numPlayers) {
                 return array(
                     "type" => "game",
-                    "pairingID" => $pairing["pairingID"],
+                    "gametaskID" => $pairing["gametaskID"],
                     "width" => $size,
                     "height" => $size,
                     "users" => $players
@@ -180,8 +180,8 @@ class ManagerAPI extends API{
                 $storedUser = $this->select("SELECT * FROM User WHERE userID=".$this->mysqli->real_escape_string($user->userID));
                 array_push($storedUsers, $storedUser);
                 if(intval($storedUser['numSubmissions']) != intval($user->numSubmissions)) {
-                    if(isset($_POST['pairingID'])) {
-                        $this->clearPairing($_POST['pairingID']);
+                    if(isset($_POST['gametaskID'])) {
+                        $this->clearGameTask($_POST['gametaskID']);
                     }
                     return null;
                 }
@@ -283,8 +283,8 @@ class ManagerAPI extends API{
                 $this->insert("UPDATE User SET rank={$rank} WHERE userID={$allUsers[$userIndex]['userID']}");
             }
 
-            if(isset($_POST['pairingID'])) {
-                $this->clearPairing($_POST['pairingID']);
+            if(isset($_POST['gametaskID'])) {
+                $this->clearGameTask($_POST['gametaskID']);
             }
         }
     }

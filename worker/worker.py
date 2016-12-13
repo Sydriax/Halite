@@ -159,7 +159,7 @@ def executeGameTask(gameTask, backend):
     fIn.close()
     fOut.close()
 
-    backend.gameResult(gameTask["pairingID"], width, height, users, replayArchivePath, errorPaths)
+    backend.gameResult(gameTask["gametaskID"], width, height, users, replayArchivePath, errorPaths)
     filelist = glob.glob("*.log")
     for f in filelist:
         os.remove(f)
