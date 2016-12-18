@@ -422,6 +422,7 @@ git_pull.php
 airesources/C++/MyBot
 airesources/C++/BasicBot
 airesources/Swift/MyBot
+airesources/Swift/RandomBot
 airesources/*/halite
 
 leaderboard.png
