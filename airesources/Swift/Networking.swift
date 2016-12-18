@@ -1,7 +1,9 @@
 import Foundation
 
+fileprivate var gameMap: GameMap!
+
 @discardableResult
-func update(gameMap: GameMap, input: String) -> GameMap {
+func deserializeGameMap(input: String) -> GameMap {
     let inputComponents = input.components(separatedBy: " ")
     
     var y = 0
@@ -45,14 +47,14 @@ func sendString(_ string: String) {
     FileHandle.standardOutput.write("\(string)\n".data(using: .utf8)!)
 }
 
-public func getInit() -> (UInt8, GameMap) {
+public func getInit() -> UInt8 {
     let tag = UInt8(getString())!
 
     var inputComponents = getString().components(separatedBy: " ")
     let width = Int(inputComponents[0])!
     let height = Int(inputComponents[1])!
     
-    let gameMap = GameMap(width: width, height: height)
+    gameMap = GameMap(width: width, height: height)
 
     inputComponents = getString().components(separatedBy: " ")
     var index = 0
@@ -63,17 +65,18 @@ public func getInit() -> (UInt8, GameMap) {
         }
     }
 
-    update(gameMap: gameMap, input: getString())
+    deserializeGameMap(input: getString())
 
-    return (tag, gameMap)
+    return tag
 }
 
 public func sendInit(name: String) {
     sendString(name)
 }
 
-public func getFrame(gameMap: inout GameMap) {
-    update(gameMap: gameMap, input: getString())
+public func getFrame() -> GameMap {
+    deserializeGameMap(input: getString())
+    return gameMap
 }
 
 public func sendFrame(moves: [Move]) {
@@ -82,4 +85,3 @@ public func sendFrame(moves: [Move]) {
 
     sendString(serialized)
 }
-                
