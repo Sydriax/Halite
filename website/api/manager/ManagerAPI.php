@@ -113,10 +113,10 @@ class ManagerAPI extends API{
             // Record pairing
             $worker = $this->select("SELECT * FROM Worker WHERE apiKey=".$this->mysqli->real_escape_string($this->apiKey)." LIMIT 1");
             $this->insert("INSERT INTO GameTask (workerID) VALUES (".$worker["workerID"].")");
-            $pairing = $this->select("SELECT * FROM GameTask WHERE workerID=".$worker["workerID"]." ORDER BY gametaskID DESC LIMIT 1");
+            $gametaskID = $this->mysqli->insert_id;
             $playerValues = array();
             foreach($players as $player) {
-                $playerValues[] = "(".$pairing["gametaskID"].", ".$player["userID"].")";
+                $playerValues[] = "(".$gametaskID.", ".$player["userID"].")";
             }
             $playerValues = implode(",", $playerValues);
             $playerInsert = "INSERT INTO GameTaskUser (gametaskID, userID) VALUES ".$playerValues;
@@ -126,7 +126,7 @@ class ManagerAPI extends API{
             if(count($players) == $numPlayers) {
                 return array(
                     "type" => "game",
-                    "gametaskID" => $pairing["gametaskID"],
+                    "gametaskID" => $gametaskID,
                     "width" => $size,
                     "height" => $size,
                     "users" => $players
