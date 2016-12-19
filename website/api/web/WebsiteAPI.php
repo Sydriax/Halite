@@ -134,7 +134,12 @@ class WebsiteAPI extends API{
         else if(isset($_GET['fields']) && isset($_GET['values'])) {
             $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 10;
             $whereClauses = array_map(function($a) {
-                return $this->mysqli->real_escape_string($_GET['fields'][$a])." = '".$this->mysqli->real_escape_string($_GET['values'][$a])."'";
+                $allowedOps = array("=", "!=", ">", "<", ">=", "<=", "IS", "IS NOT");
+                $compOp = "=";
+                if(isset($_GET['comparison']) && in_array($_GET['comparison'][$a], $allowedOps)) {
+                    $compOp = $_GET['comparison'][$a];
+                }
+                return $this->mysqli->real_escape_string($_GET['fields'][$a])." ".$compOp." '".$this->mysqli->real_escape_string($_GET['values'][$a])."'";
             }, range(0, count($_GET['fields'])-1));
             $orderBy = isset($_GET['orderBy']) ? $this->mysqli->real_escape_string($_GET['orderBy']) : 'rank';
             $page = isset($_GET['page']) ? intval($_GET['page']) : 0;

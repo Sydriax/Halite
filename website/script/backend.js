@@ -262,9 +262,35 @@ function newEmail(email) {
 
 function getGames(previousID) {
     return $.ajax({
-        url: "api/web/game",
+        url: url+"game",
         async: false,
         method: "GET",
         data: {previousID: previousID}
     }).responseJSON;
+}
+
+function getRecentSubmissions(cutoffTime) {
+    var requestData = {
+        fields: ["isRunning"],
+        comparison: ["="],
+        values: ["1"],
+        orderBy: "compileTime DESC",
+        limit: 20
+    };
+    if(typeof(cutoffTime) !== "undefined") {
+        requestData["fields"].push("compileTime");
+        requestData["comparison"].push(">");
+        requestData["values"].push(cutoffTime);
+    }
+    var result = $.ajax({
+        url: url+"user",
+        async: false,
+        method: "GET",
+        data: requestData
+    });
+    var resp = result.responseJSON;
+    if(typeof(resp.users) === "undefined") {
+        return [];
+    }
+    return resp.users;
 }

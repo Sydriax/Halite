@@ -81,6 +81,7 @@ CREATE TABLE `User` (
   `numSubmissions` smallint(5) NOT NULL DEFAULT 0,
   `numGames` smallint(5) NOT NULL DEFAULT 0,
   `creationTime` datetime DEFAULT CURRENT_TIMESTAMP,
+  `compileTime` datetime,
   `updateTime` datetime ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`userID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=latin1;
@@ -96,6 +97,7 @@ DROP TABLE IF EXISTS `UserHistory`;
 CREATE TABLE `UserHistory` (
   `userID` mediumint(8) unsigned NOT NULL,
   `versionNumber` smallint(5) NOT NULL,
+  `compileTime` datetime,
   `lastRank` smallint(5) NOT NULL,
   `lastNumPlayers` smallint(5) NOT NULL,
   `lastNumGames` smallint(5) DEFAULT NULL,
