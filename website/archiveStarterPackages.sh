@@ -16,7 +16,8 @@ mkdir Halite-Python-Starter-Package \
       Halite-JavaScript-Starter-Package \
       Halite-OCaml-Starter-Package \
       Halite-Clojure-Starter-Package \
-      Halite-C-Starter-Package
+      Halite-C-Starter-Package \
+      Halite-Kotlin-Starter-Package
 
 cp -r Python/* Halite-Python-Starter-Package/
 cp -r Java/* Halite-Java-Starter-Package/
@@ -31,6 +32,7 @@ cp -r JavaScript/* Halite-JavaScript-Starter-Package/
 cp -r OCaml/* Halite-OCaml-Starter-Package/
 cp -r Clojure/* Halite-Clojure-Starter-Package/
 cp -r C/* Halite-C-Starter-Package/
+cp -r Kotlin/* Halite-Kotlin-Starter-Package/
 
 cp -r Scala/* Halite-Scala-Starter-Package/
 rm Halite-Scala-Starter-Package/MyBot.java
@@ -48,6 +50,7 @@ zip -r Halite-JavaScript-Starter-Package.zip Halite-JavaScript-Starter-Package/
 zip -r Halite-OCaml-Starter-Package.zip Halite-OCaml-Starter-Package/
 zip -r Halite-Clojure-Starter-Package.zip Halite-Clojure-Starter-Package/
 zip -r Halite-C-Starter-Package.zip Halite-C-Starter-Package/
+zip -r Halite-Kotlin-Starter-Package.zip Halite-Kotlin-Starter-Package/
 
 mkdir -p ../website/downloads/starterpackages
 mv *.zip ../website/downloads/starterpackages

@@ -452,3 +452,9 @@ screenlog.*
 
 node_modules
 /dist
+
+
+####################
+## Intellij Idea  ##
+####################
+.idea/
