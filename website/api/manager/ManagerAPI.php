@@ -65,6 +65,11 @@ class ManagerAPI extends API{
         return floatval($lines[0]);
     }
 
+    private function clearGameTask($gametaskID) {
+        $gametaskID = $this->mysqli->real_escape_string($gametaskID);
+        $this->insert("DELETE FROM GameTaskUser WHERE gametaskID={$gametaskID}");
+        $this->insert("DELETE FROM GameTask WHERE gametaskID={$gametaskID}");
+    }
 
     /////////////////////////API ENDPOINTS\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
@@ -88,7 +93,7 @@ class ManagerAPI extends API{
             $seedPlayer = null;
             $randValue = mt_rand() / mt_getrandmax();
             if($randValue > 0.5) {
-                $seedPlayer = $this->select("SELECT * FROM User WHERE isRunning = 1 and numGames < 400 order by rand()*-pow(sigma, 2) LIMIT 1");
+                $seedPlayer = $this->select("SELECT u.* FROM (SELECT MAX(p.timestamp) as maxTime, pu.userID as userID from GameTaskUser pu INNER JOIN GameTask p ON p.gametaskID = pu.gametaskID GROUP BY pu.userID) temptable RIGHT JOIN User u on u.userID = temptable.userID WHERE (maxTime IS NULL OR maxTime < DATE_SUB(NOW(), INTERVAL 10 MINUTE)) AND isRunning = 1 and numGames < 400 order by rand()*-pow(sigma, 2) LIMIT 1");
             }
             if ($randValue > 0.25 && $randValue <= 0.5) {
                 $seedPlayer = $this->select("SELECT * FROM (SELECT u.* FROM (SELECT MAX(g.timestamp) as maxTime, gu.userID as userID FROM GameUser gu INNER JOIN Game g ON g.gameID=gu.gameID GROUP BY gu.userID) temptable INNER JOIN User u on u.userID = temptable.userID where numGames < 400 and isRunning = 1 order by maxTime ASC limit 15) orderedTable order by rand() limit 1;");
@@ -105,10 +110,23 @@ class ManagerAPI extends API{
             $sizes = array(20, 25, 25, 30, 30, 30, 35, 35, 35, 35, 40, 40, 40, 45, 45, 50);
             $size = $sizes[array_rand($sizes)];
 
+            // Record pairing
+            $worker = $this->select("SELECT * FROM Worker WHERE apiKey=".$this->mysqli->real_escape_string($this->apiKey)." LIMIT 1");
+            $this->insert("INSERT INTO GameTask (workerID) VALUES (".$worker["workerID"].")");
+            $gametaskID = $this->mysqli->insert_id;
+            $playerValues = array();
+            foreach($players as $player) {
+                $playerValues[] = "(".$gametaskID.", ".$player["userID"].")";
+            }
+            $playerValues = implode(",", $playerValues);
+            $playerInsert = "INSERT INTO GameTaskUser (gametaskID, userID) VALUES ".$playerValues;
+            $this->insert($playerInsert);
+
             // Send game task
             if(count($players) == $numPlayers) {
                 return array(
                     "type" => "game",
+                    "gametaskID" => $gametaskID,
                     "width" => $size,
                     "height" => $size,
                     "users" => $players
@@ -161,6 +179,9 @@ class ManagerAPI extends API{
                 // Will need email credentials for email sending, numSubmissions for version checking, and mu + sigma so we can update trueskill
                 $storedUser = $this->select("SELECT userID, onEmailList, email, numSubmissions, mu, sigma FROM User WHERE userID=".$this->mysqli->real_escape_string($user['userID']));
                 if(intval($storedUser['numSubmissions']) != intval($user['numSubmissions'])) {
+                    if(isset($_POST['gametaskID'])) {
+                        $this->clearGameTask($_POST['gametaskID']);
+                    }
                     return null;
                 }
                 $users[$key] = array_merge($user, $storedUser); // Second param overwrites first param
@@ -260,6 +281,10 @@ class ManagerAPI extends API{
             }
             $query .= " ELSE rank END;";
             $this->insert($query);
+
+            if(isset($_POST['gametaskID'])) {
+                $this->clearGameTask($_POST['gametaskID']);
+            }
         }
     }
 

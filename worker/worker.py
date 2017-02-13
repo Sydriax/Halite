@@ -142,8 +142,11 @@ def parseGameOutput(output, users):
 
     return width, height, users, replayPath, errorPaths
 
-def executeGameTask(width, height, users, backend):
+def executeGameTask(gameTask, backend):
     """Downloads compiled bots, runs a game, and posts the results of the game"""
+    width = int(gameTask["width"])
+    height = int(gameTask["height"])
+    users = gameTask["users"]
     print("Running game with width %d, height %d\n" % (width, height))
     print("Users objects %s\n" % (str(users)))
 
@@ -157,7 +160,7 @@ def executeGameTask(width, height, users, backend):
     fIn.close()
     fOut.close()
 
-    backend.gameResult(width, height, users, replayArchivePath, errorPaths)
+    backend.gameResult(gameTask["gametaskID"], width, height, users, replayArchivePath, errorPaths)
     filelist = glob.glob("*.log")
     for f in filelist:
         os.remove(f)
@@ -165,7 +168,7 @@ def executeGameTask(width, height, users, backend):
     os.remove(replayPath)
     os.remove(replayArchivePath)
 
-if __name__ == "__main__":
+def main():
     print("\n\n\n\nStarting up worker...\n\n\n")
     while True:
         try:
@@ -179,7 +182,7 @@ if __name__ == "__main__":
                     executeCompileTask(task["user"], backend)
                 else:
                     print("Running a game task...\n")
-                    executeGameTask(int(task["width"]), int(task["height"]), task["users"], backend)
+                    executeGameTask(task, backend)
             else:
                 print("No task available at time %s (GMT). Sleeping...\n" % str(strftime("%Y-%m-%d %H:%M:%S", gmtime())))
                 sleep(2)
@@ -188,3 +191,5 @@ if __name__ == "__main__":
             print("Sleeping...\n")
             sleep(2)
 
+if __name__ == "__main__":
+    main()
