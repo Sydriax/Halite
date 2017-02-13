@@ -131,11 +131,12 @@ class ManagerAPI extends API{
             if($didCompile == 1) { // Did succeed
                 $this->sendNotification($user, "Compilation Success", "<p>Your bot was sucessfully compiled on our servers as a program written in {$language}. Within a few minutes, your bot will begin playing games against other contestant's programs. Replays of these games will show up on your <a href='".WEB_DOMAIN."user.php'>homepage</a>.</p>", 1);
 
-                $this->insert("UPDATE User SET numSubmissions=numSubmissions+1, numGames=0, mu = 25.000, sigma = 8.333, compileStatus = 0, isRunning = 1, language = '".$this->mysqli->real_escape_string($language)."' WHERE userID = ".$this->mysqli->real_escape_string($userID));
+                $this->insert("UPDATE User SET numSubmissions=numSubmissions+1, numGames=0, mu = 25.000, sigma = 8.333, compileStatus = 0, isRunning = 1, language = '".$this->mysqli->real_escape_string($language)."', compileTime = NOW() WHERE userID = ".$this->mysqli->real_escape_string($userID));
 
                 if(intval($user['numSubmissions']) != 0) {
                     $numActiveUsers = mysqli_query($this->mysqli, "SELECT userID FROM User WHERE isRunning=1")->num_rows;
-                    $this->insert("INSERT INTO UserHistory (userID, versionNumber, lastRank, lastNumPlayers, lastNumGames) VALUES ({$user['userID']}, {$user['numSubmissions']}, {$user['rank']}, $numActiveUsers, {$user['numGames']})");
+                    $compileTime = $user['compileTime'] == NULL ? 'NULL' : "'{$user['compileTime']}'";
+                    $this->insert("INSERT INTO UserHistory (userID, versionNumber, compileTime, lastRank, lastNumPlayers, lastNumGames) VALUES ({$user['userID']}, {$user['numSubmissions']}, $compileTime, {$user['rank']}, $numActiveUsers, {$user['numGames']})");
                 }
             } else { // Didnt succeed
                 $this->sendNotification($user, "Compilation Failure", "<p>The bot that you recently submitted to the Halite competition would not compile on our servers.</p><p>Our autocompile script <b>thought that your bot was written in \"{$language}\"</b>.</p><b>Here is a description of the compilation error</b>:<br><pre><code><br>{$_POST['errors']}</code></pre>", -1);

@@ -29,7 +29,18 @@ $(function() {
             if(this.user['organization'] != 'Other') {
                 this.$secondaryInfo.append($("<span>Member of <a href='leaderboard.php?field=organization&heading="+encodeURIComponent(this.user['organization'])+"&value="+encodeURIComponent(this.user['organization'])+"'>"+this.user['organization']+ "</a></span>"));
                 this.$secondaryInfo.append($("<br>"));
-            } 
+            }
+            if(this.user['compileTime']) {
+                var dateComponents = this.user['compileTime'].split(/[- :]/);
+                var date = new Date(Date.UTC(dateComponents[0], dateComponents[1]-1, dateComponents[2], dateComponents[3], dateComponents[4], dateComponents[5]));
+                var uploadDateStr = date.toLocaleDateString();
+                if(date.getTime() > Date.now() - (24 * 60 * 60 * 1000)) {
+                    uploadDateStr = date.toLocaleTimeString();
+                }
+                this.$secondaryInfo.append($("<span>Uploaded at "+uploadDateStr+"</span>"));
+                this.$secondaryInfo.append($("<br>"));
+            }
+
             this.$secondaryInfo.append($("<span>"+this.user['numSubmissions']+" "+(parseInt(this.user['numSubmissions']) == 1 ? "bot" : "bots")+" submitted</span>"));
             this.$secondaryInfo.append($("<br>"));
             this.$secondaryInfo.append($("<span>"+this.user['numGames']+" games played</span>"));
@@ -56,7 +67,17 @@ $(function() {
             }
         },
         getTableRow: function(history) {
-            return "<tr><td>"+this.name+" v"+history.versionNumber+"</td><td>"+history.lastRank+" of "+history.lastNumPlayers+"</td><td>"+(history.lastNumGames != null ? history.lastNumGames : "Not Recorded")+"</td></tr>";
+            var uploadDateStr = "Unknown";
+            if(history.compileTime) {
+                var dateComponents = history.compileTime.split(/[- :]/);
+                var date = new Date(Date.UTC(dateComponents[0], dateComponents[1]-1, dateComponents[2], dateComponents[3], dateComponents[4], dateComponents[5]));
+                if(date.getTime() > Date.now() - (24 * 60 * 60 * 1000)) {
+                    uploadDateStr = date.toLocaleTimeString();
+                } else {
+                    uploadDateStr = date.toLocaleDateString();
+                }
+            }
+            return "<tr><td>"+this.name+" v"+history.versionNumber+"</td><td>"+uploadDateStr+"</td><td>"+history.lastRank+" of "+history.lastNumPlayers+"</td><td>"+(history.lastNumGames != null ? history.lastNumGames : "Not Recorded")+"</td></tr>";
         }
     }
 

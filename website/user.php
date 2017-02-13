@@ -55,6 +55,7 @@
                         <thead>
                             <tr id="historyTableHeader">
                                 <th>Version</th>
+                                <th>Uploaded</th>
                                 <th>Final Ranking</th>
                                 <th>Games Played</th>
                             </tr>
