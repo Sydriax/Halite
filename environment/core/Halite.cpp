@@ -306,7 +306,7 @@ void Halite::output(std::string filename) {
     gameFile.close();
 }
 
-GameStatistics Halite::runGame(std::vector<std::string> * names_, unsigned int seed, unsigned int id, bool enabledReplay, std::string replayDirectory) {
+GameStatistics Halite::runGame(std::vector<std::string> * names_, unsigned int seed, unsigned int id, bool enabledReplay, std::string replayDirectory, std::string errorDirectory) {
     //For rankings
     std::vector<bool> result(number_of_players, true);
     std::vector<unsigned char> rankings;
@@ -400,7 +400,7 @@ GameStatistics Halite::runGame(std::vector<std::string> * names_, unsigned int s
     //Output logs for players that timed out or errored.
     int timeoutIndex = 0;
     for(auto a = timeout_tags.begin(); a != timeout_tags.end(); a++) {
-        stats.timeout_log_filenames[timeoutIndex] = std::to_string(*a) + '-' + std::to_string(id) + ".log";
+        stats.timeout_log_filenames[timeoutIndex] = errorDirectory + std::to_string(*a) + '-' + std::to_string(id) + ".log";
         std::ofstream file(stats.timeout_log_filenames[timeoutIndex], std::ios_base::binary);
         file << networking.player_logs[*a - 1];
         file.flush();
