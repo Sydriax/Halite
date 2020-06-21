@@ -23,7 +23,9 @@ Edit [this whitelist](https://github.com/HaliteChallenge/Halite/edit/master/webs
 - `website/` - The website that hosts the competition. Includes the API that manages the game servers.
 - `worker/` - The source for the worker servers that compile bots and run games safely
 
-## Installing the website on Ubuntu
+## Installation 
+
+### Installing the website on Ubuntu
 
 Clone the repo:
 
@@ -33,7 +35,7 @@ Run the website install script with root user permissions. This will install php
 
     cd website; sudo ./install.sh
 
-Run the database install script with root user permissions. This will install mysql and insert our schema into a database titled Halite.
+Run the database install script with root user permissions. This will install mysql, insert our schema into a database titled Halite, and import some dummy users.
 
     cd sql; sudo ./install.sh
 
@@ -44,3 +46,26 @@ Create a `halite.ini` file using your favorite text editor in the root project d
     username = YOUR_LOCAL_MYSQL_USERNAME
     password = YOUR_LOCAL_MYSQL_PASSWORD
     name = Halite
+
+### Setting up the manager and worker on Ubuntu 
+
+We assume that you have already followed "Installing the website on Ubuntu."
+
+Run the worker install script. It will install some required libraries, switch your default compiler to g++4.9, build our docker sandbox, and enable swap memory:
+    
+    cd worker; sudo ./install.sh
+
+Add these lines to your `halite.ini` file:
+
+    [hce]
+    managerURl = http://localhost/website/api/manager/
+    apiKey = 1 
+    secretFolder = blah_blah_blah
+
+Reboot your system (because of the enabling of swap memory):
+    
+    sudo reboot
+
+Start a worker:
+
+    cd worker; sudo python3 worker.py

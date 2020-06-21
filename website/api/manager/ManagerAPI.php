@@ -202,7 +202,7 @@ class ManagerAPI extends API{
                 }
 
 
-                $s3Client->putObject($args);
+                //$s3Client->putObject($args);
             }
 
             // Check that we arent stoing too many games in db
