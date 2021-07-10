@@ -1,0 +1,7 @@
+---
+- name: Get halite code
+  git:
+    repo: "{{ halite_src }}"
+    version: "{{ halite_version }}"
+    dest: "{{ halite_dest }}"
+

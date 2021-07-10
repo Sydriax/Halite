@@ -1,0 +1,74 @@
+---
+- name: Add apt repository
+  apt_repository: repo="ppa:ondrej/php"
+
+- name: Install apt packages
+  apt: name={{item}} update_cache=yes cache_valid_time=7200
+  with_items:
+    - apache2
+    - libssl-dev
+    - php5.6
+    - php5.6-mysql
+    - python3
+    - python3-pip
+    - zip
+
+- name: Install pip packages
+  pip: name={{item}} executable=pip3
+  with_items:
+    - trueskill
+    - boto
+    - paramiko
+    - pymysql
+
+- name: Install composer
+  shell: curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+  args:
+    creates: /usr/local/bin/composer
+
+- name: Install php packages
+  become: true
+  become_user: "{{ remote_user }}"
+  shell: composer install
+  args:
+    chdir: "{{ halite_dest }}/website/"
+    creates: "{{ halite_dest }}/website/vendor/"
+
+- name: Symlink to webserver directory
+  file:
+    src: "{{ halite_dest }}"
+    dest: /var/www/Halite
+    state: link
+
+- name: Configure apache
+  template: src=apache.conf.j2 dest=/etc/apache2/sites-enabled/000-default.conf
+  notify: reload apache2
+
+- name: Enable apache modules
+  apache2_module: name={{ item }} state=present
+  with_items:
+    - rewrite
+    - expires
+  notify: restart apache2
+
+- name: Set php max upload size
+  lineinfile:
+    dest: /etc/php/5.6/apache2/php.ini
+    line: upload_max_filesize = 150M
+    regexp: "^upload_max_filesize ="
+    state: present
+  notify: restart apache2
+
+- name: Set php max post size
+  lineinfile:
+    dest: /etc/php/5.6/apache2/php.ini
+    line: post_max_size = 151M
+    regexp: "^post_max_size ="
+    state: present
+  notify: restart apache2
+
+- name: Set halite.ini
+  template:
+    src: halite.ini.j2
+    dest: "{{ halite_dest }}/halite.ini"
+    owner: "{{ remote_user }}"

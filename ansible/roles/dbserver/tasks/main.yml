@@ -1,0 +1,39 @@
+---
+- name: Install apt packages
+  apt: name={{ item }} update_cache=yes cache_valid_time=7200
+  with_items:
+    - mysql-server
+    - python-mysqldb
+
+- name: Check mysql using password
+  command: mysql -u root -e "SELECT * FROM mysql.user WHERE User='root' AND plugin!='mysql_native_password';"
+  register: mysql_use_password
+  changed_when: mysql_use_password.stdout != ""
+
+- name: Use password for mysql root auth
+  when: mysql_use_password.stdout != ""
+  command: mysql -u root -e "UPDATE mysql.user SET plugin = 'mysql_native_password' WHERE User='root'; FLUSH PRIVILEGES;"
+
+- name: Set mysql root password
+  mysql_user:
+    name: root
+    password: "{{ mysql_root_pw }}"
+
+- name: Set .my.cnf file
+  template: src=my.cnf.j2 dest={{ item.dst }} owner={{ item.owner }} mode=0640
+  with_items:
+    - { dst: "/home/{{ remote_user }}/.my.cnf", owner: "{{ remote_user }}" }
+    - { dst: /root/.my.cnf, owner: root }
+
+- name: Check halite database exists
+  command: mysql -e 'use Halite'
+  register: database_check
+  changed_when: database_check.rc != 0
+  failed_when: database_check.rc != 0 and not database_check.stderr.startswith("ERROR 1049")
+
+- name: Create halite database
+  when: database_check.rc != 0
+  mysql_db:
+    name: Halite
+    state: import
+    target: /home/{{ remote_user }}/Halite/website/sql/schema.sql

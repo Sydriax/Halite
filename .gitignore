@@ -404,6 +404,10 @@ workingPath/
 *.ini
 !travisTests.ini
 
+ansible/inventory
+ansible/settings.yml
+ansible/*.retry
+
 *.swp
 *.gch
 *.exe

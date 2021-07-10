@@ -1,0 +1,17 @@
+---
+# Halite code repository to use. Change as appropriate if you want to install
+# something other than the public source.
+halite_src: https://github.com/HaliteChallenge/Halite.git
+
+# The branch or revision to use from the above repository.
+halite_version: HEAD
+
+# Where to put the code
+halite_dest: /home/{{ remote_user }}/Halite
+
+# domain name to use for the website
+webdomain: halite.MYDOMAIN
+
+# password to use for the mysql root user.
+mysql_root_pw: MAKEMESECRET
+

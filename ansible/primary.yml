@@ -1,0 +1,17 @@
+---
+- name: Get halite code on server
+  hosts: all
+  vars_files:
+    - settings.yml
+  roles:
+    - common
+
+- name: Setup combined website and database server
+  hosts: all
+  become: yes
+  vars_files:
+    - settings.yml
+  roles:
+    - webserver
+    - dbserver
+

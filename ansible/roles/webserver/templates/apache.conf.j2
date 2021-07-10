@@ -1,0 +1,14 @@
+<VirtualHost *:80>
+    ServerName {{ webdomain }}
+
+    ServerAdmin webmaster@{{ webdomain }}
+    DocumentRoot /var/www/Halite/website
+
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+    <Directory "/var/www/Halite/website">
+        Options FollowSymLinks
+        AllowOverride All
+    </Directory>
+</VirtualHost>
